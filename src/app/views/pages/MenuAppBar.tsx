@@ -1,12 +1,16 @@
 import * as React from 'react';
 import {withStyles } from 'material-ui/styles';
+import * as classNames from 'classnames';
 import AppBar from 'material-ui/AppBar';
+import Drawer from 'material-ui/Drawer';
 import Toolbar from 'material-ui/Toolbar';
 import List from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Menu, { MenuItem } from 'material-ui/Menu';
+
+const drawerWidth = 240;
 
 const styles = (theme:any) => ({
   root: {
@@ -33,17 +37,18 @@ const styles = (theme:any) => ({
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+      duration: theme.transitions.duration.enteringScreen
+    })
   },
   flex: {
-    flex: 1,
+    flex: 1
   },
   menuButton: {
     marginLeft: 12,
-    marginRight: 36,
-  },hide: {
-    display: 'none',
+    marginRight: 36
+  },
+  hide: {
+    display: 'none'
   },
   drawerPaper: {
     position: 'relative',
@@ -52,7 +57,7 @@ const styles = (theme:any) => ({
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
-    }),
+    })
   },
   drawerPaperClose: {
     width: 60,
@@ -60,10 +65,9 @@ const styles = (theme:any) => ({
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
-    }),
+    })
   },
   drawerInner: {
-    // Make the items inside not wrap when transitioning:
     width: drawerWidth,
   },
   drawerHeader: {
@@ -83,11 +87,9 @@ const styles = (theme:any) => ({
     [theme.breakpoints.up('sm')]: {
       height: 'calc(100% - 64px)',
       marginTop: 64,
-    },
-  },
+    }
+  }
 });
-
-const drawerWidth = 240;
 
 
 interface IMenuAppBarProps {
@@ -123,23 +125,27 @@ class MenuAppBar extends React.Component<IMenuAppBarProps, IMenuAppBarState> {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, theme } = this.props;
     const {anchorEl } = this.state;
     const userActionOpen = Boolean(anchorEl);
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
         <div className={classes.appFrame}>
-          
-        </div>
-          <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+          <AppBar className={classNames(classes.appBar, this.state.drawerOpen && classes.appBarShift)}>
+            <Toolbar disableGutters={!this.state.drawerOpen}>
+            <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={this.handleDrawerOpen}
+                className={classNames(classes.menuButton, this.state.drawerOpen && classes.hide)}
+              >
                 <i className="material-icons">menu</i>
-            </IconButton>
-            <Typography variant="title" color="inherit" className={classes.flex}>
-              Coglite
-            </Typography>
+              </IconButton>
+              <Typography variant="title" color="inherit" className={classes.flex}>
+                Coglite
+              </Typography>
+            </Toolbar>
             <div>
               <IconButton
                 aria-owns={userActionOpen ? 'menu-appbar' : null}
@@ -167,15 +173,30 @@ class MenuAppBar extends React.Component<IMenuAppBarProps, IMenuAppBarState> {
                 <MenuItem onClick={this.handleClose}>My account</MenuItem>
               </Menu>
             </div>
-          </Toolbar>
-        </AppBar>
+          </AppBar>
+          <Drawer
+            variant="permanent"
+            classes={{
+              paper: classNames(classes.drawerPaper, !this.state.drawerOpen && classes.drawerPaperClose),
+            }}
+            open={this.state.drawerOpen}
+          >
+            <div className={classes.drawerInner}>
+              <div className={classes.drawerHeader}>
+                <IconButton onClick={this.handleDrawerClose}>
+                  {theme.direction === 'rtl' ? <i className="material-icons">chevron_left</i> : <i className="material-icons">chevron_right</i>}
+                </IconButton>
+              </div>
+              <Divider />
+              <List>{}</List>
+              <Divider />
+              <List>{}</List>
+            </div>
+          </Drawer>
+        </div>
       </div>
     );
   }
 }
-
-/* MenuAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-}; */
 
 export default withStyles(styles, { withTheme: true })(MenuAppBar);
