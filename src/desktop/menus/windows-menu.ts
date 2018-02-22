@@ -17,7 +17,7 @@ export function createWindowsMenu(
       ? [
           { ...shared.reload, accelerator: "Ctrl+R" },
           { ...shared.storybook, accelerator: "Ctrl+Shift+S" },
-          { ...shared.toggleDevTools, accelerator: "Ctrl+Alt+I" },
+          { ...shared.toggleDevTools, accelerator: "Ctrl+Shift+I" },
         ]
       : [{ ...shared.fullScreen, accelerator: "Ctrl+Alt+F" }],
   }

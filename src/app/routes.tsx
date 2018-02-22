@@ -1,11 +1,11 @@
 import * as React from "react"
 import { Switch, Route } from "react-router"
-/* import HomePage from './pages/home/HomePage';
-import SecondPage from './pages/home/SecondPage'; */
+import {DogTab} from './views/pages/DogPage';
+import {LongTab} from './views/pages/ParagraphPage';
 
 export default () => (
     <Switch>
-      {/* <Route path="/second" component={SecondPage} />
-      <Route path="/" component={HomePage} /> */}
+      <Route path="/second" component={LongTab} />
+      <Route path="/" component={DogTab} /> 
     </Switch>
 );

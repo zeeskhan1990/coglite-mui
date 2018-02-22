@@ -7,11 +7,25 @@ import { createBrowserHistory } from "history"
 import { RouterStore, syncHistoryWithStore } from "mobx-react-router"
 import { RootComponent } from "./app"
 import { webFrame } from "electron"
-import { css } from "glamor"
+import { cssRaw } from "typestyle";
 
-``
+cssRaw(`
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+`);
 
-import "glamor/reset" // CSS reset
+cssRaw(`
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+`);
 
 const browserHistory = createBrowserHistory()
 const routingStore = new RouterStore()
@@ -23,14 +37,6 @@ const stores = {
 }
 
 const history = syncHistoryWithStore(browserHistory, routingStore)
-
-css.global("html, body", {
-  userSelect: "none",  // turn off text highlighting
-  cursor: "default",  // reset the cursor pointer
-  font: "caption",
-  WebkitFontSmoothing: "subpixel-antialiased",
-  textRendering: "optimizeLegibility",
-})
 
 
 webFrame.setVisualZoomLevelLimits(1, 1)

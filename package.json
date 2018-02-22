@@ -33,6 +33,7 @@
     "typecheck": "tsc -p . --noEmit --pretty"
   },
   "dependencies": {
+    "@types/prop-types": "^15.5.2",
     "csx": "^8.5.0",
     "electron-is-dev": "0.3.0",
     "electron-log": "2.2.14",
@@ -56,6 +57,7 @@
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "react-transition-group": "2.2.1",
+    "typeface-roboto": "0.0.54",
     "typestyle": "^1.7.1"
   },
   "devDependencies": {

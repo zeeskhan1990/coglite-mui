@@ -2,21 +2,33 @@
 import * as React from "react"
 import { useStrict } from "mobx"
 import { Provider } from "mobx-react"
-//import { Router} from "react-router"
+import { Router} from "react-router"
 import { SynchronizedHistory } from "mobx-react-router"
-import { compose } from "glamor"
-import { styles, colors } from "./views/theme"
-import { WelcomeScreen } from "./views/home"
+//import { styles, colors } from "./views/theme"
+import Reboot from 'material-ui/Reboot';
+import AppFrame from "./views/AppFrame"
+import Routes from './routes';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#767ec4',
+      main: '#465293',
+      dark: '#112a65',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#8e99f3',
+      main: '#5c6bc0',
+      dark: '#26418f',
+      contrastText: '#fff',
+    },
+  },
+});
 
 // enable MobX strict mode
 useStrict(true)
-
-const rootStyles = compose(styles.fullScreen, {
-  background: colors.window.background,
-  "& ::-webkit-scrollbar": { backgroundColor: colors.scrollbar.base, width: 12, height: 12 },
-  "& ::-webkit-scrollbar-track": { backgroundColor: colors.scrollbar.track },
-  "& ::-webkit-scrollbar-thumb": { backgroundColor: colors.scrollbar.thumb, borderRadius: 4 },
-})
 
 interface IRootType {
   store: any,
@@ -26,9 +38,14 @@ interface IRootType {
 export function RootComponent({ store, history }: IRootType) {
   return (
     <Provider {...store}>
-      <div {...rootStyles}>
-        <WelcomeScreen />
-      </div>
+      <MuiThemeProvider theme={theme}>
+        <Reboot />
+        <AppFrame>
+          <Router history={history}>
+              <Routes/>
+          </Router>   
+        </AppFrame>
+      </MuiThemeProvider>
   </Provider>
   )
 }
