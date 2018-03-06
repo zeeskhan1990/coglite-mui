@@ -1,21 +1,48 @@
-import { FuseBox, CSSPlugin, Sparky, CopyPlugin, ReplacePlugin } from "fuse-box"
+import { FuseBox, CSSPlugin, SassPlugin, Sparky, CopyPlugin, ReplacePlugin } from "fuse-box"
 import { spawn } from "child_process"
 import * as pjson from "./package.json"
+import { palette } from "./src/app/views/theme/palette"
 
 const DEV_PORT = 4445
 const OUTPUT_DIR = "out"
 const ASSETS = ["*.jpg", "*.png", "*.jpeg", "*.gif", "*.svg"]
-
+const ASSETS_DIR = "src/app/assets"
 
 const isProduction = process.env.NODE_ENV === "production"
-
 
 Sparky.task("copy-html", () => {
   return Sparky.src("src/app/index.html").dest(`${OUTPUT_DIR}/$name`)
 })
 
+const preTasks = ["copy-html"]
+
+Object.keys(palette).forEach(paletteKey => {
+  const currentPalette = palette[paletteKey]
+  const currentTask = `theme_${paletteKey}`
+  console.log("###############################")
+  console.log(currentPalette)
+  console.log(currentTask)
+  Sparky.task(currentTask, () => {
+    return Sparky.src(`${ASSETS_DIR}/base-colors.scss`)
+      .file("*.*", file => {
+        file.rename(`${currentTask}.scss`)
+        file.read()
+        file.setContent(`
+            $mdc-theme-primary: ${currentPalette.primary};
+            $mdc-theme-secondary: ${currentPalette.secondary};
+            $mdc-theme-background: ${currentPalette.background};
+            ${file.contents}
+            `)
+      })
+      .dest(`${ASSETS_DIR}/$name`)
+  })
+  preTasks.push(currentTask)
+})
+
+console.log(preTasks)
+
 // shared task
-Sparky.task("default", ["copy-html"], () => {
+Sparky.task("default", preTasks, () => {
   const fuse = FuseBox.init({
     homeDir: "src",
     output: `${OUTPUT_DIR}/$name.js`,
@@ -52,15 +79,13 @@ Sparky.task("default", ["copy-html"], () => {
   const rendererBundle = fuse
     .bundle("webapp")
     .instructions("> [app/index.tsx] +fuse-box-css")
-    .plugin(CSSPlugin())
+    .plugin([SassPlugin({ importer: true }), CSSPlugin()])
     .plugin(CopyPlugin({ useDefault: false, files: ASSETS, dest: "assets", resolve: "assets/" }))
-
 
   if (!isProduction) {
     rendererBundle.watch()
     rendererBundle.hmr()
   }
-
 
   return fuse.run().then(() => {
     if (!isProduction) {

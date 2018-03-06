@@ -9,7 +9,6 @@
     "noUnusedLocals": true,
     "strictNullChecks": false,
     "noImplicitReturns": true,
-    "noImplicitAny": true,
     "outDir": "dist"
   },
   "include": ["src", "typings", "fuse.ts", "./storybook/views"],

@@ -2,36 +2,37 @@
 import * as React from "react"
 import { useStrict } from "mobx"
 import { Provider } from "mobx-react"
-import { Router} from "react-router"
+import { Router } from "react-router"
 import { SynchronizedHistory } from "mobx-react-router"
 //import { styles, colors } from "./views/theme"
-import Reboot from 'material-ui/Reboot';
+import Reboot from "material-ui/Reboot"
 import AppFrame from "./views/AppFrame"
-import Routes from './routes';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import Routes from "./routes"
+import { MuiThemeProvider, createMuiTheme, Theme } from "material-ui/styles"
+import { palette } from "./views/theme/palette"
 
-const theme = createMuiTheme({
+const theme: Theme = createMuiTheme({
   palette: {
     primary: {
-      light: '#767ec4',
-      main: '#465293',
-      dark: '#112a65',
-      contrastText: '#fff',
+      light: "#767ec4",
+      main: "#68483d",
+      dark: "#112a65",
+      contrastText: "#fff",
     },
     secondary: {
-      light: '#8e99f3',
-      main: '#5c6bc0',
-      dark: '#26418f',
-      contrastText: '#fff',
+      light: "#8e99f3",
+      main: "#5c6bc0",
+      dark: "#26418f",
+      contrastText: "#fff",
     },
   },
-});
+})
 
 // enable MobX strict mode
 useStrict(true)
 
 interface IRootType {
-  store: any,
+  store: any
   history: SynchronizedHistory
 }
 
@@ -42,10 +43,10 @@ export function RootComponent({ store, history }: IRootType) {
         <Reboot />
         <AppFrame>
           <Router history={history}>
-              <Routes/>
-          </Router>   
+            <Routes />
+          </Router>
         </AppFrame>
       </MuiThemeProvider>
-  </Provider>
+    </Provider>
   )
 }
