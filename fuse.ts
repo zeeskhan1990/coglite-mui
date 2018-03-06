@@ -79,7 +79,13 @@ Sparky.task("default", preTasks, () => {
   const rendererBundle = fuse
     .bundle("webapp")
     .instructions("> [app/index.tsx] +fuse-box-css")
-    .plugin([SassPlugin({ importer: true }), CSSPlugin()])
+    .plugin([
+      SassPlugin({ importer: true }),
+      CSSPlugin({
+        outFile: file => `${OUTPUT_DIR}/${file}`,
+        inject: false,
+      }),
+    ])
     .plugin(CopyPlugin({ useDefault: false, files: ASSETS, dest: "assets", resolve: "assets/" }))
 
   if (!isProduction) {
