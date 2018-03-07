@@ -8,9 +8,6 @@ import { RouterStore, syncHistoryWithStore } from "mobx-react-router"
 import { RootComponent } from "./app"
 import { webFrame } from "electron"
 import { observable } from "mobx"
-import { customCss } from "./assets/*.scss"
-
-//@import url('node_modules/@material/button/dist/mdc.button.min.css')
 
 let uiState = observable({
   theme: "velocity",
