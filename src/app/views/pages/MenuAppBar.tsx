@@ -1,17 +1,29 @@
 import * as React from "react"
+import * as PropTypes from "prop-types"
+import { ListItem, ListItemIcon, ListItemText } from "material-ui/List"
+import InboxIcon from "material-ui-icons/MoveToInbox"
+import DraftsIcon from "material-ui-icons/Drafts"
+import StarIcon from "material-ui-icons/Star"
+import SendIcon from "material-ui-icons/Send"
+import MailIcon from "material-ui-icons/Mail"
+import DeleteIcon from "material-ui-icons/Delete"
+import ReportIcon from "material-ui-icons/Report"
 import { withStyles } from "material-ui/styles"
 import * as classNames from "classnames"
-import AppBar from "material-ui/AppBar"
 import Drawer from "material-ui/Drawer"
+import AppBar from "material-ui/AppBar"
 import Toolbar from "material-ui/Toolbar"
 import List from "material-ui/List"
-import Divider from "material-ui/Divider"
 import Typography from "material-ui/Typography"
+import Divider from "material-ui/Divider"
 import IconButton from "material-ui/IconButton"
+import MenuIcon from "material-ui-icons/Menu"
+import ChevronLeftIcon from "material-ui-icons/ChevronLeft"
+import ChevronRightIcon from "material-ui-icons/ChevronRight"
+import AccountCircle from "material-ui-icons/AccountCircle"
 import Menu, { MenuItem } from "material-ui/Menu"
 import { Button } from "rmwc/Button"
 import { Slider } from "rmwc/Slider"
-//import style from '@material/button/dist/mdc.button.min.css';
 
 const drawerWidth = 240
 
@@ -23,7 +35,8 @@ type ThemedStylesDeclaration = (theme: any) => StylesDeclaration
 
 const styles: ThemedStylesDeclaration = theme => ({
   root: {
-    flexGrow: 1,
+    width: "100%",
+    marginTop: theme.spacing.unit * 3,
     zIndex: 1,
     overflow: "hidden",
   },
@@ -49,9 +62,6 @@ const styles: ThemedStylesDeclaration = theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  flex: {
-    flex: 1,
-  },
   menuButton: {
     marginLeft: 12,
     marginRight: 36,
@@ -63,6 +73,7 @@ const styles: ThemedStylesDeclaration = theme => ({
     position: "relative",
     height: "100%",
     width: drawerWidth,
+    overflow: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -70,21 +81,26 @@ const styles: ThemedStylesDeclaration = theme => ({
   },
   drawerPaperClose: {
     width: 60,
-    overflowX: "hidden",
+    overflow: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
   drawerInner: {
+    // Make the items inside not wrap when transitioning:
     width: drawerWidth,
   },
   drawerHeader: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     padding: "0 8px",
+    marginLeft: "12px",
     ...theme.mixins.toolbar,
+  },
+  flex: {
+    flex: 1,
   },
   content: {
     width: "100%",
@@ -118,20 +134,20 @@ class MenuAppBar extends React.Component<IMenuAppBarProps, IMenuAppBarState> {
     sliderValue: undefined,
   }
 
-  handleMenu = (event: any) => {
-    this.setState({ anchorEl: event.currentTarget })
-  }
-
-  handleClose = () => {
-    this.setState({ anchorEl: null })
-  }
-
   handleDrawerOpen = () => {
     this.setState({ drawerOpen: true })
   }
 
   handleDrawerClose = () => {
     this.setState({ drawerOpen: false })
+  }
+
+  handleUserAction = event => {
+    this.setState({ anchorEl: event.currentTarget })
+  }
+
+  handleUserActionClose = () => {
+    this.setState({ anchorEl: null })
   }
 
   render() {
@@ -144,7 +160,6 @@ class MenuAppBar extends React.Component<IMenuAppBarProps, IMenuAppBarState> {
         <div className={classes.appFrame}>
           <AppBar
             className={classNames(classes.appBar, this.state.drawerOpen && classes.appBarShift)}
-            position="static"
           >
             <Toolbar disableGutters={!this.state.drawerOpen}>
               <IconButton
@@ -153,39 +168,39 @@ class MenuAppBar extends React.Component<IMenuAppBarProps, IMenuAppBarState> {
                 onClick={this.handleDrawerOpen}
                 className={classNames(classes.menuButton, this.state.drawerOpen && classes.hide)}
               >
-                <i className="material-icons">menu</i>
+                <MenuIcon />
               </IconButton>
-              <Typography variant="title" color="inherit" className={classes.flex}>
+              <Typography variant="title" color="inherit" className={classes.flex} noWrap>
                 Coglite
               </Typography>
+              <div>
+                <IconButton
+                  aria-owns={userActionOpen ? "menu-appbar" : null}
+                  aria-haspopup="true"
+                  onClick={this.handleUserAction}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={userActionOpen}
+                  onClose={this.handleUserActionClose}
+                >
+                  <MenuItem onClick={this.handleUserActionClose}>Profile</MenuItem>
+                  <MenuItem onClick={this.handleUserActionClose}>My account</MenuItem>
+                </Menu>
+              </div>
             </Toolbar>
-            <div>
-              <IconButton
-                aria-owns={userActionOpen ? "menu-appbar" : null}
-                aria-haspopup="true"
-                onClick={this.handleMenu}
-                color="inherit"
-              >
-                <i className="material-icons">account_circle</i>
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={userActionOpen}
-                onClose={this.handleClose}
-              >
-                <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                <MenuItem onClick={this.handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
           </AppBar>
           <Drawer
             variant="permanent"
@@ -199,27 +214,69 @@ class MenuAppBar extends React.Component<IMenuAppBarProps, IMenuAppBarState> {
           >
             <div className={classes.drawerInner}>
               <div className={classes.drawerHeader}>
+                <Typography align="right" variant="subheading" color="inherit" noWrap>
+                  App Drawer
+                </Typography>
                 <IconButton onClick={this.handleDrawerClose}>
-                  {theme.direction === "rtl" ? (
-                    <i className="material-icons">chevron_left</i>
-                  ) : (
-                    <i className="material-icons">chevron_right</i>
-                  )}
+                  {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                 </IconButton>
               </div>
               <Divider />
-              <List>{}</List>
+              <List>
+                <div>
+                  <ListItem button>
+                    <ListItemIcon>
+                      <InboxIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Inbox" />
+                  </ListItem>
+                  <ListItem button>
+                    <ListItemIcon>
+                      <StarIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Starred" />
+                  </ListItem>
+                  <ListItem button>
+                    <ListItemIcon>
+                      <SendIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Send mail" />
+                  </ListItem>
+                  <ListItem button>
+                    <ListItemIcon>
+                      <DraftsIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Drafts" />
+                  </ListItem>
+                </div>
+              </List>
               <Divider />
-              <List>{}</List>
+              <List>
+                <div>
+                  <ListItem button>
+                    <ListItemIcon>
+                      <MailIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="All mail" />
+                  </ListItem>
+                  <ListItem button>
+                    <ListItemIcon>
+                      <DeleteIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Trash" />
+                  </ListItem>
+                  <ListItem button>
+                    <ListItemIcon>
+                      <ReportIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Spam" />
+                  </ListItem>
+                </div>
+              </List>
             </div>
           </Drawer>
           <main className={classes.content}>
             <Typography noWrap>{"You think water moves fast? You should see ice."}</Typography>
-            <Button>Hello World</Button>
-            <Slider
-              value={this.state.sliderValue === undefined ? 50 : this.state.sliderValue}
-              onChange={evt => this.setState({ sliderValue: evt.target.value })}
-            />
           </main>
         </div>
       </div>

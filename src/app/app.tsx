@@ -14,16 +14,10 @@ import { palette } from "./views/theme/palette"
 const theme: Theme = createMuiTheme({
   palette: {
     primary: {
-      light: "#767ec4",
-      main: "#68483d",
-      dark: "#112a65",
-      contrastText: "#fff",
+      main: palette.myriad.primary,
     },
     secondary: {
-      light: "#8e99f3",
-      main: "#5c6bc0",
-      dark: "#26418f",
-      contrastText: "#fff",
+      main: palette.myriad.secondary,
     },
   },
 })

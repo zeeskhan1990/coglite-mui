@@ -1,9 +1,7 @@
 import * as React from "react"
-import { style } from "typestyle"
 import { withStyles } from "material-ui/styles"
 import Grid from "material-ui/Grid"
 import MenuAppBar from "./pages/MenuAppBar"
-import { cssRaw } from "typestyle"
 
 const styles = (theme: any) => ({
   root: {
@@ -41,11 +39,11 @@ class AppFrame extends React.Component<any, any> {
   } */
 
   render() {
-    const { classes, theme } = this.props
+    const { classes } = this.props
 
     return (
       <Grid container className={classes.root}>
-        <MenuAppBar />
+        <MenuAppBar {...classes} />
       </Grid>
     )
   }

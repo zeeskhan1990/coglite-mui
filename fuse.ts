@@ -1,12 +1,4 @@
-import {
-  FuseBox,
-  CSSPlugin,
-  SassPlugin,
-  Sparky,
-  CopyPlugin,
-  ReplacePlugin,
-  QuantumPlugin,
-} from "fuse-box"
+import { FuseBox, CSSPlugin, SassPlugin, Sparky, CopyPlugin, ReplacePlugin } from "fuse-box"
 import { spawn } from "child_process"
 import * as pjson from "./package.json"
 import { palette } from "./src/app/views/theme/palette"
@@ -28,9 +20,6 @@ const materialSass = []
 Object.keys(palette).forEach(paletteKey => {
   const currentPalette = palette[paletteKey]
   const currentTask = `theme_${paletteKey}`
-  console.log("###############################")
-  console.log(currentPalette)
-  console.log(currentTask)
   Sparky.task(currentTask, () => {
     return Sparky.src(`${ASSETS_DIR}/base-colors.scss`)
       .file("*.*", file => {
@@ -43,7 +32,6 @@ Object.keys(palette).forEach(paletteKey => {
           ${file.contents}
         `)
         materialSass.push(`import "./assets/${currentTask}.scss"`)
-        console.log(materialSass.join("\n"))
       })
       .dest(`${ASSETS_DIR}/$name`)
   })
@@ -65,47 +53,6 @@ Sparky.task("sassImportTask", () => {
 })
 
 preTasks.push("sassImportTask")
-
-//Sparky.src(`${OUTPUT_DIR}/assets/*.scss`)
-
-/* .file("*.*", file => {
-      file.read()
-      file.plugin(SassPlugin({ importer: true })).plugin(CSSPlugin({
-        outFile: file => `${OUTPUT_DIR}/${file}`,
-        inject: false
-      }))
-    }) */
-/* .plugin(SassPlugin({ importer: true }))
-    .plugin(CSSPlugin({
-      outFile: file => `${OUTPUT_DIR}/${file}`,
-      inject: false,
-    })) */
-//.dest(`${ASSETS_DIR}/$name`)
-
-/* {
-    outFile: file => `${OUTPUT_DIR}/${file}`,
-    inject: false
-  } */
-
-/* Sparky.src(`${ASSETS_DIR}/base-csdfsadasd.scss`).next(file => SassPlugin({
-    importer: true,
-    includePaths:[file.filepath]
-  })) */
-/* .file("*.*", file => {
-    file.rename(`base-colors-test.css`)
-  })
-  .dest(`${ASSETS_DIR}/$name`) */
-
-/* Sparky.task("testTask", () => {
-  return Sparky.src(`${ASSETS_DIR}/base-colors.scss`)
-  .plugin(SassPlugin({ importer: true }))
-  .plugin(CSSPlugin())
-  .plugin(QuantumPlugin({css: true}))
-  .dest(`${ASSETS_DIR}`)
-}) */
-
-//preTasks.push("testTask");
-console.log(preTasks)
 
 // shared task
 Sparky.task("default", preTasks, () => {
@@ -144,23 +91,16 @@ Sparky.task("default", preTasks, () => {
   // bundle the electron renderer code      +fuse-box-css
   const rendererBundle = fuse
     .bundle("webapp")
-    .instructions("> [app/styled-index.tsx]")
-    /* .plugin(
-      ReplacePlugin({
-        "process.env.BREAKBONE": "beak",
-      })
-    ) */
+    .instructions("> [app/styled-index.tsx] +fuse-box-css")
     .plugin([
       SassPlugin({ importer: true }),
       CSSPlugin({
         outFile: file => {
           const fileName = file.split("/").pop()
-          console.log(fileName)
           return `${OUTPUT_DIR}/assets/${fileName}`
         },
         inject: false,
       }),
-      //QuantumPlugin({css: true})
     ])
     .plugin(CopyPlugin({ useDefault: false, files: ASSETS, dest: "assets", resolve: "assets/" }))
 

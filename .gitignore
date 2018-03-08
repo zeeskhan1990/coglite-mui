@@ -9,3 +9,5 @@ tmp/
 dev-app-update.yml
 .vscode/
 coverage/
+src/app/assets/*.scss
+src/app/styled-index.tsx
