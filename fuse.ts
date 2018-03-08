@@ -19,7 +19,7 @@ const materialSass = []
 
 Object.keys(palette).forEach(paletteKey => {
   const currentPalette = palette[paletteKey]
-  const currentTask = `theme_${paletteKey}`
+  const currentTask = `theme-${paletteKey}`
   Sparky.task(currentTask, () => {
     return Sparky.src(`${ASSETS_DIR}/base-colors.scss`)
       .file("*.*", file => {

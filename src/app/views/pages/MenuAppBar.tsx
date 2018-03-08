@@ -275,9 +275,7 @@ class MenuAppBar extends React.Component<IMenuAppBarProps, IMenuAppBarState> {
               </List>
             </div>
           </Drawer>
-          <main className={classes.content}>
-            <Typography noWrap>{"You think water moves fast? You should see ice."}</Typography>
-          </main>
+          <main className={classes.content}>{this.props.children}</main>
         </div>
       </div>
     )

@@ -43,7 +43,7 @@ class AppFrame extends React.Component<any, any> {
 
     return (
       <Grid container className={classes.root}>
-        <MenuAppBar {...classes} />
+        <MenuAppBar {...classes}>{this.props.children}</MenuAppBar>
       </Grid>
     )
   }
