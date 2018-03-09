@@ -7,17 +7,11 @@ import { createBrowserHistory } from "history"
 import { RouterStore, syncHistoryWithStore } from "mobx-react-router"
 import { RootComponent } from "./app"
 import { webFrame } from "electron"
-import { uiStore } from "./stores"
-
+import { StoreRoot } from "./stores/storeRoot"
 const browserHistory = createBrowserHistory()
 const routingStore = new RouterStore()
 
-const stores = {
-  // Key can be whatever you want
-  routing: routingStore,
-  uiStore: uiStore,
-  // ...other stores
-}
+const stores = new StoreRoot()
 
 const history = syncHistoryWithStore(browserHistory, routingStore)
 

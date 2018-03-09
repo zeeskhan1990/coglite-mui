@@ -1,4 +1,4 @@
-import { palette } from "./views/theme/palette"
+import { palette } from "./../views/theme/palette"
 import { createMuiTheme } from "material-ui/styles"
 import mobx, { observable, computed, action } from "mobx"
 
@@ -38,4 +38,4 @@ class UiStore {
   }
 }
 
-export const uiStore = new UiStore()
+export {UiStore}
