@@ -1,6 +1,7 @@
 import { palette } from "./../views/theme/palette"
 import { createMuiTheme } from "material-ui/styles"
-import mobx, { observable, computed, action } from "mobx"
+import * as mobx from "mobx"
+import { observable, computed, action } from "mobx"
 
 class UiStore {
   @observable themeId = "myriad"
@@ -11,6 +12,7 @@ class UiStore {
 
   @computed
   get muiTheme() {
+    debugger
     return createMuiTheme({
       palette: {
         primary: {

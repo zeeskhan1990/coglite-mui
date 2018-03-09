@@ -11,7 +11,7 @@ import { StoreRoot } from "./stores/storeRoot"
 const browserHistory = createBrowserHistory()
 const routingStore = new RouterStore()
 
-const stores = new StoreRoot()
+const store = new StoreRoot()
 
 const history = syncHistoryWithStore(browserHistory, routingStore)
 
@@ -21,4 +21,4 @@ webFrame.setLayoutZoomLevelLimits(0, 0)
 document.addEventListener("dragover", event => event.preventDefault())
 document.addEventListener("drop", event => event.preventDefault())
 
-ReactDOM.render(<RootComponent store={stores} history={history} />, document.getElementById("root"))
+ReactDOM.render(<RootComponent store={store} history={history} />, document.getElementById("root"))

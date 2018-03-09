@@ -23,8 +23,10 @@ import ChevronLeftIcon from "material-ui-icons/ChevronLeft"
 import ChevronRightIcon from "material-ui-icons/ChevronRight"
 import AccountCircle from "material-ui-icons/AccountCircle"
 import Menu, { MenuItem } from "material-ui/Menu"
+import { inject, observer } from "mobx-react"
 import { Button } from "rmwc/Button"
 import { Slider } from "rmwc/Slider"
+import { StoreRoot } from "../stores/storeRoot"
 
 const drawerWidth = 240
 
@@ -126,6 +128,7 @@ const styles: ThemedStylesDeclaration = theme => ({
 interface IAppFrameProps {
   classes: any
   theme: any
+  store: StoreRoot
 }
 
 interface IAppFrameState {
@@ -134,6 +137,8 @@ interface IAppFrameState {
   sliderValue: any
 }
 
+@inject("store")
+@observer
 class AppFrame extends React.Component<IAppFrameProps, IAppFrameState> {
   state: IAppFrameState = {
     anchorEl: null,
@@ -154,6 +159,12 @@ class AppFrame extends React.Component<IAppFrameProps, IAppFrameState> {
   }
 
   handleUserActionClose = () => {
+    this.setState({ anchorEl: null })
+  }
+
+  handleUserProfile = () => {
+    debugger
+    this.props.store.uiStore.updateTheme("velocity")
     this.setState({ anchorEl: null })
   }
 
@@ -212,7 +223,7 @@ class AppFrame extends React.Component<IAppFrameProps, IAppFrameState> {
                     open={userActionOpen}
                     onClose={this.handleUserActionClose}
                   >
-                    <MenuItem onClick={this.handleUserActionClose}>Profile</MenuItem>
+                    <MenuItem onClick={this.handleUserProfile}>Profile</MenuItem>
                     <MenuItem onClick={this.handleUserActionClose}>My account</MenuItem>
                   </Menu>
                 </div>
