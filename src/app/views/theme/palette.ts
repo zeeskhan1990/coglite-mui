@@ -6,7 +6,7 @@ export const palette = {
   },
   ranger: {
     primary: "#2196F3",
-    secondary: "#FF9800",
+    secondary: "#CDDC39",
     background: "#FFFFFF",
   },
   velocity: {

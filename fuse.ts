@@ -88,12 +88,13 @@ Sparky.task("default", preTasks, () => {
     desktopBundle.watch()
   }
 
-  // bundle the electron renderer code      +fuse-box-css
+  // bundle the electron renderer code
   const rendererBundle = fuse
     .bundle("webapp")
     .instructions("> [app/styled-index.tsx] +fuse-box-css")
     .plugin([
-      SassPlugin({ importer: true }),
+      //Fix for missing interpretation of @material in nested scss
+      SassPlugin({ importer: true, macros: { "@material": "node_modules/@material/" } }),
       CSSPlugin({
         outFile: file => {
           const fileName = file.split("/").pop()

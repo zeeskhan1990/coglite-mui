@@ -12,7 +12,6 @@ class UiStore {
 
   @computed
   get muiTheme() {
-    debugger
     return createMuiTheme({
       palette: {
         primary: {

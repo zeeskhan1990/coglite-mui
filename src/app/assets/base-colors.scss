@@ -1,7 +1,9 @@
 /*Base Sass File*/
 
-@import "~@material/theme/mdc-theme";
-//@import "~@material/slider/mdc-slider";
+@import "@material/theme/mdc-theme";
+//@import "@material/typography/mixins";
+//@import "@material/rtl/mixins";
+@import "@material/slider/mdc-slider";
 
 /* Rules for sizing the icon. */
 .material-icons.md-18 { font-size: 18px; }

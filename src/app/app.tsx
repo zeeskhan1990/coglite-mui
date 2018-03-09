@@ -31,6 +31,7 @@ export class RootComponent extends React.Component<IRootType, {}> {
               <Routes />
             </Router>
           </AppFrame>
+          <link rel="stylesheet" type="text/css" href={this.props.store.uiStore.rmwcPath} />
         </MuiThemeProvider>
       </Provider>
     )

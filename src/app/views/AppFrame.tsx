@@ -24,9 +24,9 @@ import ChevronRightIcon from "material-ui-icons/ChevronRight"
 import AccountCircle from "material-ui-icons/AccountCircle"
 import Menu, { MenuItem } from "material-ui/Menu"
 import { inject, observer } from "mobx-react"
+import { StoreRoot } from "../stores/storeRoot"
 import { Button } from "rmwc/Button"
 import { Slider } from "rmwc/Slider"
-import { StoreRoot } from "../stores/storeRoot"
 
 const drawerWidth = 240
 
@@ -163,7 +163,6 @@ class AppFrame extends React.Component<IAppFrameProps, IAppFrameState> {
   }
 
   handleUserProfile = () => {
-    debugger
     this.props.store.uiStore.updateTheme("velocity")
     this.setState({ anchorEl: null })
   }
