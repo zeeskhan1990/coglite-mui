@@ -3,39 +3,39 @@ import { createMuiTheme } from "material-ui/styles"
 import mobx, { observable, computed, action } from "mobx"
 
 class UiStore {
-  @observable theme = "myriad"
+  @observable themeId = "myriad"
 
   constructor() {
     mobx.autorun(() => console.log(this.report))
   }
 
   @computed
-  get getMuiTheme() {
+  get muiTheme() {
     return createMuiTheme({
       palette: {
         primary: {
-          main: palette.myriad.primary,
+          main: palette[this.themeId].primary,
         },
         secondary: {
-          main: palette.myriad.secondary,
+          main: palette[this.themeId].secondary,
         },
       },
     })
   }
 
   @computed
-  get getRmwcPath() {
-    return `assets/theme-${this.theme}.css`
+  get rmwcPath() {
+    return `assets/theme-${this.themeId}.css`
   }
 
   report() {
-    console.log("Current theme is " + this.theme)
+    console.log("Current theme is " + this.themeId)
   }
 
   @action
-  updateTheme(theme) {
-    this.theme = theme
+  updateTheme(themeId) {
+    this.themeId = themeId
   }
 }
 
-export {UiStore}
+export { UiStore }

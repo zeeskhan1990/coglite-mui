@@ -4,23 +4,10 @@ import { useStrict } from "mobx"
 import { Provider } from "mobx-react"
 import { Router } from "react-router"
 import { SynchronizedHistory } from "mobx-react-router"
-//import { styles, colors } from "./views/theme"
 import Reboot from "material-ui/Reboot"
 import AppFrame from "./views/AppFrame"
 import Routes from "./routes"
-import { MuiThemeProvider, createMuiTheme, Theme } from "material-ui/styles"
-import { palette } from "./views/theme/palette"
-
-const theme: Theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: palette.myriad.primary,
-    },
-    secondary: {
-      main: palette.myriad.secondary,
-    },
-  },
-})
+import { MuiThemeProvider } from "material-ui/styles"
 
 // enable MobX strict mode
 useStrict(true)
@@ -30,17 +17,20 @@ interface IRootType {
   history: SynchronizedHistory
 }
 
-export function RootComponent({ store, history }: IRootType) {
-  return (
-    <Provider {...store}>
-      <MuiThemeProvider theme={theme}>
-        <Reboot />
-        <AppFrame>
-          <Router history={history}>
-            <Routes />
-          </Router>
-        </AppFrame>
-      </MuiThemeProvider>
-    </Provider>
-  )
+export class RootComponent extends React.Component<IRootType, {}> {
+  render() {
+    const theme = this.props.store.uiStore.muiTheme
+    return (
+      <Provider {...this.props.store}>
+        <MuiThemeProvider theme={theme}>
+          <Reboot />
+          <AppFrame>
+            <Router history={this.props.history}>
+              <Routes />
+            </Router>
+          </AppFrame>
+        </MuiThemeProvider>
+      </Provider>
+    )
+  }
 }
