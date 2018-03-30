@@ -1,5 +1,5 @@
 import { palette } from "./../views/theme/palette"
-import { createMuiTheme } from "material-ui/styles"
+import { createMuiTheme as Mui } from "material-ui/styles"
 import * as mobx from "mobx"
 import { observable, computed, action } from "mobx"
 
@@ -12,7 +12,7 @@ class UiStore {
 
   @computed
   get muiTheme() {
-    return createMuiTheme({
+    return Mui({
       palette: {
         primary: {
           main: palette[this.themeId].primary,

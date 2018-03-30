@@ -8,7 +8,7 @@ import { StoreRoot } from "../../stores/storeRoot"
 import { observer, inject } from "mobx-react"
 
 interface IDashboardProps {
-  store: StoreRoot
+  store?: StoreRoot
 }
 
 interface IDashboardState {
@@ -17,7 +17,7 @@ interface IDashboardState {
 
 @inject("store")
 @observer
-export class Dashboard extends React.Component<IDashboardProps, IDashboardState> {
+export default class extends React.Component<IDashboardProps, IDashboardState> {
   state: IDashboardState = {
     sliderValue: 50,
   }

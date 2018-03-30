@@ -1,17 +1,17 @@
 export const palette = {
   myriad: {
     primary: "#F44336",
-    secondary: "#795548",
+    secondary: "#8BC34A",
     background: "#FFFFFF",
   },
   ranger: {
     primary: "#2196F3",
-    secondary: "#CDDC39",
+    secondary: "#E64A19",
     background: "#FFFFFF",
   },
   velocity: {
-    primary: "#795548",
-    secondary: "#FFC107",
+    primary: "#FFA000",
+    secondary: "#607D8B",
     background: "#FFFFFF",
   },
 }

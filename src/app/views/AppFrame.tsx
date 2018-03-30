@@ -1,5 +1,4 @@
 import * as React from "react"
-import * as PropTypes from "prop-types"
 import { ListItem, ListItemIcon, ListItemText } from "material-ui/List"
 import InboxIcon from "material-ui-icons/MoveToInbox"
 import DraftsIcon from "material-ui-icons/Drafts"
@@ -8,7 +7,7 @@ import SendIcon from "material-ui-icons/Send"
 import MailIcon from "material-ui-icons/Mail"
 import DeleteIcon from "material-ui-icons/Delete"
 import ReportIcon from "material-ui-icons/Report"
-import { withStyles } from "material-ui/styles"
+import withStyles, { WithStyles, StyleRulesCallback } from "material-ui/styles/withStyles"
 import Grid from "material-ui/Grid"
 import * as classNames from "classnames"
 import Drawer from "material-ui/Drawer"
@@ -25,18 +24,10 @@ import AccountCircle from "material-ui-icons/AccountCircle"
 import Menu, { MenuItem } from "material-ui/Menu"
 import { inject, observer } from "mobx-react"
 import { StoreRoot } from "../stores/storeRoot"
-import { Button } from "rmwc/Button"
-import { Slider } from "rmwc/Slider"
 
 const drawerWidth = 240
 
-type StylesDeclaration = {
-  [key: string]: React.CSSProperties | StylesDeclaration
-}
-
-type ThemedStylesDeclaration = (theme: any) => StylesDeclaration
-
-const styles: ThemedStylesDeclaration = theme => ({
+const styles: StyleRulesCallback<any> = theme => ({
   gridRoot: {
     flexGrow: 1,
     width: "100vw",
@@ -45,7 +36,6 @@ const styles: ThemedStylesDeclaration = theme => ({
   },
   root: {
     width: "100%",
-    marginTop: theme.spacing.unit * 3,
     zIndex: 1,
     overflow: "hidden",
   },
@@ -125,10 +115,10 @@ const styles: ThemedStylesDeclaration = theme => ({
   },
 })
 
+const decorate = withStyles(styles, { withTheme: true })
+
 interface IAppFrameProps {
-  classes: any
-  theme: any
-  store: StoreRoot
+  store?: StoreRoot
 }
 
 interface IAppFrameState {
@@ -137,176 +127,184 @@ interface IAppFrameState {
   sliderValue: any
 }
 
-@inject("store")
-@observer
-class AppFrame extends React.Component<IAppFrameProps, IAppFrameState> {
-  state: IAppFrameState = {
-    anchorEl: null,
-    drawerOpen: false,
-    sliderValue: undefined,
-  }
+export default inject("store")(
+  observer(
+    decorate(
+      class extends React.Component<IAppFrameProps & WithStyles<any>> {
+        state: IAppFrameState = {
+          anchorEl: null,
+          drawerOpen: false,
+          sliderValue: undefined,
+        }
 
-  handleDrawerOpen = () => {
-    this.setState({ drawerOpen: true })
-  }
+        handleDrawerOpen = () => {
+          this.setState({ drawerOpen: true })
+        }
 
-  handleDrawerClose = () => {
-    this.setState({ drawerOpen: false })
-  }
+        handleDrawerClose = () => {
+          this.setState({ drawerOpen: false })
+        }
 
-  handleUserAction = event => {
-    this.setState({ anchorEl: event.currentTarget })
-  }
+        handleUserAction = event => {
+          this.setState({ anchorEl: event.currentTarget })
+        }
 
-  handleUserActionClose = () => {
-    this.setState({ anchorEl: null })
-  }
+        handleUserActionClose = () => {
+          this.setState({ anchorEl: null })
+        }
 
-  handleUserProfile = () => {
-    this.props.store.uiStore.updateTheme("velocity")
-    this.setState({ anchorEl: null })
-  }
+        handleUserProfile = () => {
+          this.props.store.uiStore.updateTheme("velocity")
+          this.setState({ anchorEl: null })
+        }
 
-  renderDevTool() {
-    if (process.env.NODE_ENV !== "production") {
-      const DevTools = require("mobx-react-devtools").default
-      return <DevTools />
-    }
-    return null
-  }
+        renderDevTool() {
+          if (process.env.NODE_ENV !== "production") {
+            const DevTools = require("mobx-react-devtools").default
+            return <DevTools />
+          }
+          return null
+        }
 
-  render() {
-    const { classes, theme } = this.props
-    const { anchorEl } = this.state
-    const userActionOpen = Boolean(anchorEl)
+        render() {
+          const { classes, theme } = this.props
+          const { anchorEl } = this.state
+          const userActionOpen = Boolean(anchorEl)
 
-    return (
-      <Grid container className={classes.gridRoot}>
-        <div className={classes.root}>
-          <div className={classes.appFrame}>
-            <AppBar
-              className={classNames(classes.appBar, this.state.drawerOpen && classes.appBarShift)}
-            >
-              <Toolbar disableGutters={!this.state.drawerOpen}>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={this.handleDrawerOpen}
-                  className={classNames(classes.menuButton, this.state.drawerOpen && classes.hide)}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Typography variant="title" color="inherit" className={classes.flex} noWrap>
-                  Coglite
-                </Typography>
-                <div>
-                  <IconButton
-                    aria-owns={userActionOpen ? "menu-appbar" : null}
-                    aria-haspopup="true"
-                    onClick={this.handleUserAction}
-                    color="inherit"
+          return (
+            <Grid container className={classes.gridRoot}>
+              <div className={classes.root}>
+                <div className={classes.appFrame}>
+                  <AppBar
+                    className={classNames(
+                      classes.appBar,
+                      this.state.drawerOpen && classes.appBarShift,
+                    )}
                   >
-                    <AccountCircle />
-                  </IconButton>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
+                    <Toolbar disableGutters={!this.state.drawerOpen}>
+                      <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={this.handleDrawerOpen}
+                        className={classNames(
+                          classes.menuButton,
+                          this.state.drawerOpen && classes.hide,
+                        )}
+                      >
+                        <MenuIcon />
+                      </IconButton>
+                      <Typography variant="title" color="inherit" className={classes.flex} noWrap>
+                        Coglite
+                      </Typography>
+                      <div>
+                        <IconButton
+                          aria-owns={userActionOpen ? "menu-appbar" : null}
+                          aria-haspopup="true"
+                          onClick={this.handleUserAction}
+                          color="inherit"
+                        >
+                          <AccountCircle />
+                        </IconButton>
+                        <Menu
+                          id="menu-appbar"
+                          anchorEl={anchorEl}
+                          anchorOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                          }}
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                          }}
+                          open={userActionOpen}
+                          onClose={this.handleUserActionClose}
+                        >
+                          <MenuItem onClick={this.handleUserProfile}>Profile</MenuItem>
+                          <MenuItem onClick={this.handleUserActionClose}>My account</MenuItem>
+                        </Menu>
+                      </div>
+                    </Toolbar>
+                  </AppBar>
+                  <Drawer
+                    variant="permanent"
+                    classes={{
+                      paper: classNames(
+                        classes.drawerPaper,
+                        !this.state.drawerOpen && classes.drawerPaperClose,
+                      ),
                     }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    open={userActionOpen}
-                    onClose={this.handleUserActionClose}
+                    open={this.state.drawerOpen}
                   >
-                    <MenuItem onClick={this.handleUserProfile}>Profile</MenuItem>
-                    <MenuItem onClick={this.handleUserActionClose}>My account</MenuItem>
-                  </Menu>
+                    <div className={classes.drawerInner}>
+                      <div className={classes.drawerHeader}>
+                        <Typography align="right" variant="subheading" color="inherit" noWrap>
+                          Application Menu
+                        </Typography>
+                        <IconButton onClick={this.handleDrawerClose}>
+                          {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        </IconButton>
+                      </div>
+                      <Divider />
+                      <List>
+                        <div>
+                          <ListItem button>
+                            <ListItemIcon>
+                              <InboxIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Inbox" />
+                          </ListItem>
+                          <ListItem button>
+                            <ListItemIcon>
+                              <StarIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Starred" />
+                          </ListItem>
+                          <ListItem button>
+                            <ListItemIcon>
+                              <SendIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Send mail" />
+                          </ListItem>
+                          <ListItem button>
+                            <ListItemIcon>
+                              <DraftsIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Drafts" />
+                          </ListItem>
+                        </div>
+                      </List>
+                      <Divider />
+                      <List>
+                        <div>
+                          <ListItem button>
+                            <ListItemIcon>
+                              <MailIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="All mail" />
+                          </ListItem>
+                          <ListItem button>
+                            <ListItemIcon>
+                              <DeleteIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Trash" />
+                          </ListItem>
+                          <ListItem button>
+                            <ListItemIcon>
+                              <ReportIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Spam" />
+                          </ListItem>
+                        </div>
+                      </List>
+                    </div>
+                  </Drawer>
+                  <main className={classes.content}>{this.props.children}</main>
                 </div>
-              </Toolbar>
-            </AppBar>
-            <Drawer
-              variant="permanent"
-              classes={{
-                paper: classNames(
-                  classes.drawerPaper,
-                  !this.state.drawerOpen && classes.drawerPaperClose,
-                ),
-              }}
-              open={this.state.drawerOpen}
-            >
-              <div className={classes.drawerInner}>
-                <div className={classes.drawerHeader}>
-                  <Typography align="right" variant="subheading" color="inherit" noWrap>
-                    App Drawer
-                  </Typography>
-                  <IconButton onClick={this.handleDrawerClose}>
-                    {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                  </IconButton>
-                </div>
-                <Divider />
-                <List>
-                  <div>
-                    <ListItem button>
-                      <ListItemIcon>
-                        <InboxIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Inbox" />
-                    </ListItem>
-                    <ListItem button>
-                      <ListItemIcon>
-                        <StarIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Starred" />
-                    </ListItem>
-                    <ListItem button>
-                      <ListItemIcon>
-                        <SendIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Send mail" />
-                    </ListItem>
-                    <ListItem button>
-                      <ListItemIcon>
-                        <DraftsIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Drafts" />
-                    </ListItem>
-                  </div>
-                </List>
-                <Divider />
-                <List>
-                  <div>
-                    <ListItem button>
-                      <ListItemIcon>
-                        <MailIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="All mail" />
-                    </ListItem>
-                    <ListItem button>
-                      <ListItemIcon>
-                        <DeleteIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Trash" />
-                    </ListItem>
-                    <ListItem button>
-                      <ListItemIcon>
-                        <ReportIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Spam" />
-                    </ListItem>
-                  </div>
-                </List>
               </div>
-            </Drawer>
-            <main className={classes.content}>{this.props.children}</main>
-          </div>
-        </div>
-      </Grid>
-    )
-  }
-}
-
-export default withStyles(styles, { withTheme: true })(AppFrame)
+            </Grid>
+          )
+        }
+      },
+    ),
+  ),
+)

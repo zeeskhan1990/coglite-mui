@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Switch, Route } from "react-router"
-import { Dashboard } from "./views/pages/Dashboard"
+import Dashboard from "./views/pages/Dashboard"
 
 export default () => (
   <Switch>
