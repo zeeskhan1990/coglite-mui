@@ -24,6 +24,9 @@ import AccountCircle from "material-ui-icons/AccountCircle"
 import Menu, { MenuItem } from "material-ui/Menu"
 import { inject, observer } from "mobx-react"
 import { StoreRoot } from "../stores/storeRoot"
+import Image from "material-ui-image"
+
+const cogliteLogo = require("../assets/coglite-logo-dark.png")
 
 const drawerWidth = 240
 
@@ -47,7 +50,7 @@ const styles: StyleRulesCallback<any> = theme => ({
   },
   appBar: {
     position: "absolute",
-    zIndex: theme.zIndex.drawer + 1,
+    /* zIndex: theme.zIndex.drawer + 1, */
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -62,7 +65,7 @@ const styles: StyleRulesCallback<any> = theme => ({
     }),
   },
   menuButton: {
-    marginLeft: 12,
+    marginLeft: 60,
     marginRight: 36,
   },
   hide: {
@@ -95,11 +98,17 @@ const styles: StyleRulesCallback<any> = theme => ({
     alignItems: "center",
     justifyContent: "space-between",
     padding: "0 8px",
-    marginLeft: "12px",
+    marginLeft: "6px",
     ...theme.mixins.toolbar,
   },
   flex: {
     flex: 1,
+  },
+  headerLogo: {
+    position: "relative",
+    padding: 0,
+    width: "30px",
+    height: "30px",
   },
   content: {
     width: "100%",
@@ -193,9 +202,7 @@ export default inject("store")(
                       >
                         <MenuIcon />
                       </IconButton>
-                      <Typography variant="title" color="inherit" className={classes.flex} noWrap>
-                        Coglite
-                      </Typography>
+                      <Typography variant="title" color="inherit" className={classes.flex} noWrap />
                       <div>
                         <IconButton
                           aria-owns={userActionOpen ? "menu-appbar" : null}
@@ -237,8 +244,13 @@ export default inject("store")(
                   >
                     <div className={classes.drawerInner}>
                       <div className={classes.drawerHeader}>
-                        <Typography align="right" variant="subheading" color="inherit" noWrap>
-                          Application Menu
+                        <img
+                          src={cogliteLogo}
+                          style={{ padding: 0 }}
+                          className={classes.headerLogo}
+                        />
+                        <Typography align="right" variant="headline" color="inherit" noWrap>
+                          Coglite
                         </Typography>
                         <IconButton onClick={this.handleDrawerClose}>
                           {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
