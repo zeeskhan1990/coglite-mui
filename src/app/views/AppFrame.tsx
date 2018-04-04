@@ -26,7 +26,6 @@ import { inject, observer } from "mobx-react"
 import { StoreRoot } from "../stores/storeRoot"
 
 const drawerWidth = 240
-const toolbarHeight = 48
 
 const styles: StyleRulesCallback<any> = theme => ({
   gridRoot: {
@@ -46,14 +45,8 @@ const styles: StyleRulesCallback<any> = theme => ({
     width: "100%",
     height: "100%",
   },
-  topAppBar: {
-    position: "absolute",
-  },
-  bottomAppBar: {
-    position: "absolute",
-    top: toolbarHeight,
-  },
   appBar: {
+    position: "absolute",
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
@@ -68,9 +61,6 @@ const styles: StyleRulesCallback<any> = theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  toolbar: {
-    minHeight: toolbarHeight,
-  },
   menuButton: {
     marginLeft: 12,
     marginRight: 36,
@@ -79,8 +69,7 @@ const styles: StyleRulesCallback<any> = theme => ({
     display: "none",
   },
   drawerPaper: {
-    position: "absolute",
-    top: toolbarHeight,
+    position: "relative",
     height: "100%",
     width: drawerWidth,
     overflow: "hidden",
@@ -107,10 +96,6 @@ const styles: StyleRulesCallback<any> = theme => ({
     justifyContent: "space-between",
     padding: "0 8px",
     marginLeft: "12px",
-    minHeight: toolbarHeight,
-    [theme.breakpoints.up("sm")]: {
-      minHeight: toolbarHeight,
-    },
     ...theme.mixins.toolbar,
   },
   flex: {
@@ -124,8 +109,8 @@ const styles: StyleRulesCallback<any> = theme => ({
     height: "calc(100% - 56px)",
     marginTop: 56,
     [theme.breakpoints.up("sm")]: {
-      height: `calc(100% -${toolbarHeight}px)`,
-      marginTop: toolbarHeight,
+      height: "calc(100% - 64px)",
+      marginTop: 64,
     },
   },
 })
@@ -190,8 +175,13 @@ export default inject("store")(
             <Grid container className={classes.gridRoot}>
               <div className={classes.root}>
                 <div className={classes.appFrame}>
-                  <AppBar className={classNames(classes.appBar, classes.topAppBar)}>
-                    <Toolbar disableGutters={!this.state.drawerOpen} className={classes.toolbar}>
+                  <AppBar
+                    className={classNames(
+                      classes.appBar,
+                      this.state.drawerOpen && classes.appBarShift,
+                    )}
+                  >
+                    <Toolbar disableGutters={!this.state.drawerOpen}>
                       <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -234,15 +224,6 @@ export default inject("store")(
                         </Menu>
                       </div>
                     </Toolbar>
-                  </AppBar>
-                  <AppBar
-                    className={classNames(
-                      classes.appBar,
-                      classes.bottomAppBar,
-                      this.state.drawerOpen && classes.appBarShift,
-                    )}
-                  >
-                    <Toolbar disableGutters={!this.state.drawerOpen} className={classes.toolbar} />
                   </AppBar>
                   <Drawer
                     variant="permanent"
