@@ -18,15 +18,15 @@ import Typography from "material-ui/Typography"
 import Divider from "material-ui/Divider"
 import IconButton from "material-ui/IconButton"
 import MenuIcon from "material-ui-icons/Menu"
-import ChevronLeftIcon from "material-ui-icons/ChevronLeft"
-import ChevronRightIcon from "material-ui-icons/ChevronRight"
+import ArrowBackIcon from "material-ui-icons/ArrowBack"
 import AccountCircle from "material-ui-icons/AccountCircle"
 import Menu, { MenuItem } from "material-ui/Menu"
 import { inject, observer } from "mobx-react"
 import { StoreRoot } from "../stores/storeRoot"
-import Image from "material-ui-image"
+import Tabs, { Tab } from "material-ui/Tabs"
+/* import Image from "material-ui-image" */
 
-const cogliteLogo = require("../assets/coglite-logo-dark.png")
+const cogliteLogo = require("../assets/coglite-logo-dark-gold-box.png")
 
 const drawerWidth = 240
 
@@ -35,7 +35,8 @@ const styles: StyleRulesCallback<any> = theme => ({
     flexGrow: 1,
     width: "100vw",
     height: "100vh",
-    padding: theme.spacing.unit * 2,
+    padding: 0,
+    margin: 0,
   },
   root: {
     width: "100%",
@@ -98,8 +99,8 @@ const styles: StyleRulesCallback<any> = theme => ({
     alignItems: "center",
     justifyContent: "space-between",
     padding: "0 8px",
-    marginLeft: "6px",
     ...theme.mixins.toolbar,
+    boxShadow: theme.shadows["4"],
   },
   flex: {
     flex: 1,
@@ -107,8 +108,8 @@ const styles: StyleRulesCallback<any> = theme => ({
   headerLogo: {
     position: "relative",
     padding: 0,
-    width: "30px",
-    height: "30px",
+    width: "120px",
+    height: "40px",
   },
   content: {
     width: "100%",
@@ -134,6 +135,20 @@ interface IAppFrameState {
   anchorEl: any
   drawerOpen: boolean
   sliderValue: any
+  tabValue: number
+}
+
+interface ITabContainerProps {
+  children: React.ReactNode
+  tabValue: number
+}
+
+const TabContainer: React.SFC<ITabContainerProps> = props => {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  )
 }
 
 export default inject("store")(
@@ -144,6 +159,7 @@ export default inject("store")(
           anchorEl: null,
           drawerOpen: false,
           sliderValue: undefined,
+          tabValue: 0,
         }
 
         handleDrawerOpen = () => {
@@ -167,6 +183,25 @@ export default inject("store")(
           this.setState({ anchorEl: null })
         }
 
+        handleTabChange = (event, tabValue) => {
+          this.setState({ tabValue })
+        }
+
+        handleAppBarTransition = (event, next) => {
+          console.log("APP BAR TRANSITION CAUGHT....")
+          debugger
+          console.log(event)
+          console.log(next)
+          console.log(event.type)
+          console.log(event.propertyName)
+          this.handleTabChange(event, this.state.tabValue)
+        }
+
+        handleDrawerTransition = event => {
+          /* console.log("DRAWER TRANSITION CAUGHT....");
+          console.log(event) */
+        }
+
         renderDevTool() {
           if (process.env.NODE_ENV !== "production") {
             const DevTools = require("mobx-react-devtools").default
@@ -176,8 +211,8 @@ export default inject("store")(
         }
 
         render() {
-          const { classes, theme } = this.props
-          const { anchorEl } = this.state
+          const { classes } = this.props
+          const { anchorEl, tabValue } = this.state
           const userActionOpen = Boolean(anchorEl)
 
           return (
@@ -189,6 +224,7 @@ export default inject("store")(
                       classes.appBar,
                       this.state.drawerOpen && classes.appBarShift,
                     )}
+                    onTransitionEnd={e => this.handleAppBarTransition(e, 2)}
                   >
                     <Toolbar disableGutters={!this.state.drawerOpen}>
                       <IconButton
@@ -202,7 +238,19 @@ export default inject("store")(
                       >
                         <MenuIcon />
                       </IconButton>
-                      <Typography variant="title" color="inherit" className={classes.flex} noWrap />
+                      <Tabs
+                        value={tabValue}
+                        onChange={this.handleTabChange}
+                        centered
+                        indicatorColor="secondary"
+                        className={classes.flex}
+                      >
+                        <Tab label="Item One" />
+                        <Tab label="Item Two" />
+                        <Tab label="Item Three" href="#basic-tabs" />
+                        <Tab label="Item Four" href="#basic-tabs" />
+                        <Tab label="Item Five" href="#basic-tabs" />
+                      </Tabs>
                       <div>
                         <IconButton
                           aria-owns={userActionOpen ? "menu-appbar" : null}
@@ -241,6 +289,7 @@ export default inject("store")(
                       ),
                     }}
                     open={this.state.drawerOpen}
+                    onTransitionEnd={this.handleDrawerTransition}
                   >
                     <div className={classes.drawerInner}>
                       <div className={classes.drawerHeader}>
@@ -249,11 +298,8 @@ export default inject("store")(
                           style={{ padding: 0 }}
                           className={classes.headerLogo}
                         />
-                        <Typography align="right" variant="headline" color="inherit" noWrap>
-                          Coglite
-                        </Typography>
                         <IconButton onClick={this.handleDrawerClose}>
-                          {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                          <ArrowBackIcon />
                         </IconButton>
                       </div>
                       <Divider />
