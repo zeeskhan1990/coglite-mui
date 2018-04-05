@@ -24,6 +24,8 @@ import Menu, { MenuItem } from "material-ui/Menu"
 import { inject, observer } from "mobx-react"
 import { StoreRoot } from "../stores/storeRoot"
 import Tabs, { Tab } from "material-ui/Tabs"
+import * as _ from "lodash"
+
 /* import Image from "material-ui-image" */
 
 const cogliteLogo = require("../assets/coglite-logo-dark-gold-box.png")
@@ -141,8 +143,11 @@ interface ITabContainerProps {
 
 const TabContainer: React.SFC<ITabContainerProps> = props => {
   return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
+    <Typography component="div" style={{ padding: 8 * 1 }}>
+      <div style={{ padding: 8 * 1, display: "flex", justifyContent: "center" }}>
+        {props.tabValue + 1}
+      </div>
+      <div style={{ padding: 8 * 1 }}>{props.children}</div>
     </Typography>
   )
 }
@@ -161,28 +166,10 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
     this.props.store.uiStore.updateMenuDrawerState(openState)
   }
 
-  /* handleDrawerOpen = () => {
-    //this.setState({ drawerOpen: true })
-    this.props.store.uiStore.updateMenuDrawerState(true)
-  }
-
-  handleDrawerClose = () => {
-    //this.setState({ drawerOpen: false })
-    this.props.store.uiStore.updateMenuDrawerState(false)
-  } */
-
   toggleUserAction = (event?: any) => {
     const anchorElement = event ? event.currentTarget : null
     this.setState({ anchorEl: anchorElement })
   }
-
-  /* handleUserAction = event => {
-    this.setState({ anchorEl: event.currentTarget })
-  }
-
-  handleUserActionClose = () => {
-    this.setState({ anchorEl: null })
-  } */
 
   handleUserProfile = () => {
     this.props.store.uiStore.updateTheme("velocity")
@@ -197,20 +184,15 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
     this.setState({ tabValue })
   }
 
-  handleAppBarTransition = (event, next) => {
+  handleAppBarTransition = _.debounce(() => {
     console.log("APP BAR TRANSITION CAUGHT....")
-    //debugger
-    console.log(event)
-    console.log(next)
-    console.log(event.type)
-    console.log(event.propertyName)
+    debugger
     //Broke the 4th Wall Right here ---
     window.dispatchEvent(new Event("resize"))
-  }
+  }, 200)
 
   handleDrawerTransition = event => {
-    /* console.log("DRAWER TRANSITION CAUGHT....");
-    console.log(event) */
+    //no-op
   }
 
   renderDevTool() {
@@ -234,7 +216,7 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
           <div className={classes.appFrame}>
             <AppBar
               className={classNames(classes.appBar, isMenuDrawerOpen && classes.appBarShift)}
-              onTransitionEnd={e => this.handleAppBarTransition(e, 2)}
+              onTransitionEnd={this.handleAppBarTransition}
             >
               <Toolbar disableGutters={!isMenuDrawerOpen}>
                 <IconButton
@@ -252,11 +234,11 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
                   indicatorColor="secondary"
                   className={classes.flex}
                 >
-                  <Tab label="Item One" />
-                  <Tab label="Item Two" />
-                  <Tab label="Item Three" href="#basic-tabs" />
-                  <Tab label="Item Four" href="#basic-tabs" />
-                  <Tab label="Item Five" href="#basic-tabs" />
+                  <Tab label="Item One" href="#" />
+                  <Tab label="Item Two" href="#" />
+                  <Tab label="Item Three" href="#" />
+                  <Tab label="Item Four" href="#" />
+                  <Tab label="Item Five" href="#" />
                 </Tabs>
                 <div>
                   <IconButton
@@ -361,7 +343,9 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
                 </List>
               </div>
             </Drawer>
-            <main className={classes.content}>{this.props.children}</main>
+            <main className={classes.content}>
+              <TabContainer tabValue={tabValue}>{this.props.children}</TabContainer>
+            </main>
           </div>
         </div>
       </Grid>
