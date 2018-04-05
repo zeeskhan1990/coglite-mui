@@ -5,6 +5,9 @@ import { observable, computed, action } from "mobx"
 
 class UiStore {
   @observable themeId = "myriad"
+  @observable isMenuDrawerOpen = false
+  @observable isNodeDrawerOpen = false
+  @observable isNodeFormDrawerOpen = false
 
   constructor() {
     mobx.autorun(() => console.log(this.report))
@@ -35,7 +38,23 @@ class UiStore {
 
   @action
   updateTheme(themeId) {
+    debugger
     this.themeId = themeId
+  }
+
+  @action
+  updateMenuDrawerState(isMenuDrawerOpen) {
+    this.isMenuDrawerOpen = isMenuDrawerOpen
+  }
+
+  @action
+  updateNodeDrawerState(isNodeDrawerOpen) {
+    this.isNodeDrawerOpen = isNodeDrawerOpen
+  }
+
+  @action
+  updateNodeFormDrawerState(isNodeFormDrawerOpen) {
+    this.isNodeFormDrawerOpen = isNodeFormDrawerOpen
   }
 }
 
