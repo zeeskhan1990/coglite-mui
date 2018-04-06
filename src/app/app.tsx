@@ -7,8 +7,8 @@ import { SynchronizedHistory } from "mobx-react-router"
 import Reboot from "material-ui/Reboot"
 import AppFrame from "./views/AppFrame"
 import Routes from "./routes"
-import { MuiThemeProvider } from "material-ui/styles"
 import { StoreRoot } from "./stores/storeRoot"
+import { ThemeProvider } from "react-jss"
 
 // enable MobX strict mode
 useStrict(true)
@@ -24,15 +24,17 @@ export class RootComponent extends React.Component<IRootType, {}> {
     const theme = this.props.store.uiStore.muiTheme
     return (
       <Provider store={this.props.store}>
-        <MuiThemeProvider theme={theme}>
-          <Reboot />
-          <AppFrame>
-            <Router history={this.props.history}>
-              <Routes />
-            </Router>
-          </AppFrame>
-          <link rel="stylesheet" type="text/css" href={this.props.store.uiStore.rmwcPath} />
-        </MuiThemeProvider>
+        <ThemeProvider theme={theme}>
+          <div id="rootBlock">
+            <Reboot />
+            <AppFrame>
+              <Router history={this.props.history}>
+                <Routes />
+              </Router>
+            </AppFrame>
+            <link rel="stylesheet" type="text/css" href={this.props.store.uiStore.rmwcPath} />
+          </div>
+        </ThemeProvider>
       </Provider>
     )
   }

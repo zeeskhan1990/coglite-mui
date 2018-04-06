@@ -38,7 +38,6 @@ class UiStore {
 
   @action
   updateTheme(themeId) {
-    debugger
     this.themeId = themeId
   }
 

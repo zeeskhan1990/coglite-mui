@@ -7,7 +7,7 @@ import SendIcon from "material-ui-icons/Send"
 import MailIcon from "material-ui-icons/Mail"
 import DeleteIcon from "material-ui-icons/Delete"
 import ReportIcon from "material-ui-icons/Report"
-import withStyles, { WithStyles, StyleRulesCallback } from "material-ui/styles/withStyles"
+import { WithStyles, StyleRulesCallback } from "material-ui/styles/withStyles"
 import Grid from "material-ui/Grid"
 import * as classNames from "classnames"
 import Drawer from "material-ui/Drawer"
@@ -25,6 +25,7 @@ import { inject, observer } from "mobx-react"
 import { StoreRoot } from "../stores/storeRoot"
 import Tabs, { Tab } from "material-ui/Tabs"
 import * as _ from "lodash"
+import injectSheet from "react-jss"
 
 /* import Image from "material-ui-image" */
 
@@ -178,6 +179,9 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
 
   handleUserSettings = event => {
     //no-op
+    //this.props.classes.
+    debugger
+    this.props
   }
 
   handleTabChange = (event, tabValue) => {
@@ -185,8 +189,6 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
   }
 
   handleAppBarTransition = _.debounce(() => {
-    console.log("APP BAR TRANSITION CAUGHT....")
-    debugger
     //Broke the 4th Wall Right here ---
     window.dispatchEvent(new Event("resize"))
   }, 200)
@@ -204,7 +206,6 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
   }
 
   render() {
-    debugger
     const { classes } = this.props
     const isMenuDrawerOpen = this.props.store.uiStore.isMenuDrawerOpen
     const { anchorEl, tabValue } = this.state
@@ -353,4 +354,4 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
   }
 }
 
-export default withStyles(styles)(AppFrame)
+export default injectSheet(styles)(AppFrame)
