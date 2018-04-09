@@ -7,7 +7,7 @@ import SendIcon from "material-ui-icons/Send"
 import MailIcon from "material-ui-icons/Mail"
 import DeleteIcon from "material-ui-icons/Delete"
 import ReportIcon from "material-ui-icons/Report"
-import { WithStyles, StyleRulesCallback } from "material-ui/styles/withStyles"
+//import { WithStyles, StyleRulesCallback } from "material-ui/styles/withStyles"
 import Grid from "material-ui/Grid"
 import * as classNames from "classnames"
 import Drawer from "material-ui/Drawer"
@@ -20,6 +20,9 @@ import IconButton from "material-ui/IconButton"
 import MenuIcon from "material-ui-icons/Menu"
 import ArrowBackIcon from "material-ui-icons/ArrowBack"
 import AccountCircle from "material-ui-icons/AccountCircle"
+import FormatAlignRight from "material-ui-icons/FormatAlignRight"
+import ChevronRight from "material-ui-icons/ChevronRight"
+import BorderRight from "material-ui-icons/BorderRight"
 import Menu, { MenuItem } from "material-ui/Menu"
 import { inject, observer } from "mobx-react"
 import { StoreRoot } from "../stores/storeRoot"
@@ -31,9 +34,11 @@ import injectSheet from "react-jss"
 
 const cogliteLogo = require("../assets/coglite-logo-dark-gold-box.png")
 
-const drawerWidth = 240
+const appMenuDrawerWidth = 240
+const nodeDrawerWidth = 180
+const nodeFormDrawerWidth = 120
 
-const styles: StyleRulesCallback<any> = theme => ({
+const styles: any = theme => ({
   gridRoot: {
     flexGrow: 1,
     width: "100vw",
@@ -60,13 +65,32 @@ const styles: StyleRulesCallback<any> = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+  appBarLeftShift: {
+    marginLeft: appMenuDrawerWidth,
+    width: `calc(100% - ${appMenuDrawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+  },
+  appBarRightShift: {
+    width: props => {
+      let shiftWidth = 0
+      if (props.store.uiStore.isNodeDrawerOpen) shiftWidth += nodeDrawerWidth
+      if (props.store.uiStore.isNodeFormDrawerOpen) shiftWidth += nodeFormDrawerWidth
+      return `calc(100% - ${shiftWidth}px)`
+    } /* `calc(100% - ${nodeDrawerWidth}px)` */,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginRight: props => {
+      debugger
+      let shiftWidth = 0
+      if (props.store.uiStore.isNodeDrawerOpen) shiftWidth += nodeDrawerWidth
+      if (props.store.uiStore.isNodeFormDrawerOpen) shiftWidth += nodeFormDrawerWidth
+      return shiftWidth
+    },
   },
   menuButton: {
     marginLeft: 60,
@@ -78,7 +102,7 @@ const styles: StyleRulesCallback<any> = theme => ({
   drawerPaper: {
     position: "relative",
     height: "100%",
-    width: drawerWidth,
+    width: appMenuDrawerWidth,
     overflow: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -95,7 +119,7 @@ const styles: StyleRulesCallback<any> = theme => ({
   },
   drawerInner: {
     // Make the items inside not wrap when transitioning:
-    width: drawerWidth,
+    width: appMenuDrawerWidth,
   },
   drawerHeader: {
     display: "flex",
@@ -114,19 +138,77 @@ const styles: StyleRulesCallback<any> = theme => ({
     width: "120px",
     height: "40px",
   },
+  nodeDrawerPaper: {
+    position: "relative",
+    width: nodeDrawerWidth,
+  },
+  nodeDrawerPaperAnchorRight: {
+    left: "auto",
+    right: 0,
+  },
+  nodeDrawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: "0 8px",
+    ...theme.mixins.toolbar,
+  },
+  nodeFormDrawerPaper: {
+    position: "relative",
+    width: nodeFormDrawerWidth,
+  },
+  nodeFormDrawerPaperAnchorRight: {
+    left: "auto",
+    right: 0,
+  },
+  nodeFormDrawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: "0 8px",
+    ...theme.mixins.toolbar,
+  },
   content: {
     width: "100%",
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: 24,
+    padding: theme.spacing.unit * 2,
     height: "calc(100% - 56px)",
     marginTop: 56,
+    marginLeft: props => {
+      debugger
+      let leftMargin = 0
+      if (props.store.uiStore.isNodeDrawerOpen || props.store.uiStore.isNodeFormDrawerOpen)
+        leftMargin = 300
+      return leftMargin
+    },
     [theme.breakpoints.up("sm")]: {
       height: "calc(100% - 64px)",
       marginTop: 64,
     },
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginRight: -(nodeDrawerWidth + nodeFormDrawerWidth),
+  },
+  contentRightShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginRight: props => {
+      debugger
+      let currentMargin
+      if (props.store.uiStore.isNodeDrawerOpen && props.store.uiStore.isNodeFormDrawerOpen)
+        currentMargin = 0
+      else if (props.store.uiStore.isNodeDrawerOpen) currentMargin = nodeFormDrawerWidth
+      else if (props.store.uiStore.isNodeFormDrawerOpen) currentMargin = nodeDrawerWidth
+      return currentMargin
+    },
   },
 })
+
 interface IAppFrameProps {
   store?: StoreRoot
 }
@@ -153,21 +235,32 @@ const TabContainer: React.SFC<ITabContainerProps> = props => {
   )
 }
 
-@inject("store")
+/* @inject("store")
 @observer
-export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, IAppFrameState> {
+@injectSheet(styles) */
+export class AppFrame extends React.Component<any, IAppFrameState> {
   state: IAppFrameState = {
     anchorEl: null,
     sliderValue: undefined,
     tabValue: 0,
   }
 
-  toggleMenuDrawer = (openState: boolean) => {
-    //debugger
-    this.props.store.uiStore.updateMenuDrawerState(openState)
+  toggleMenuDrawer = () => {
+    debugger
+    this.props.store.uiStore.updateMenuDrawerState(!this.props.store.uiStore.isMenuDrawerOpen)
   }
 
-  toggleUserAction = (event?: any) => {
+  toggleNodeDrawer = () => {
+    this.props.store.uiStore.updateNodeDrawerState(!this.props.store.uiStore.isNodeDrawerOpen)
+  }
+
+  toggleNodeFormDrawer = () => {
+    this.props.store.uiStore.updateNodeFormDrawerState(
+      !this.props.store.uiStore.isNodeFormDrawerOpen,
+    )
+  }
+
+  handleUserAction = (event?: any) => {
     const anchorElement = event ? event.currentTarget : null
     this.setState({ anchorEl: anchorElement })
   }
@@ -179,9 +272,6 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
 
   handleUserSettings = event => {
     //no-op
-    //this.props.classes.
-    debugger
-    this.props
   }
 
   handleTabChange = (event, tabValue) => {
@@ -207,23 +297,107 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
 
   render() {
     const { classes } = this.props
-    const isMenuDrawerOpen = this.props.store.uiStore.isMenuDrawerOpen
+    const { isMenuDrawerOpen, isNodeDrawerOpen, isNodeFormDrawerOpen } = this.props.store.uiStore
     const { anchorEl, tabValue } = this.state
     const userActionOpen = Boolean(anchorEl)
+
+    const nodeDrawer = (
+      <Drawer
+        variant="persistent"
+        anchor="right"
+        open={isNodeDrawerOpen}
+        classes={{
+          paper: classes.nodeDrawerPaper,
+          paperAnchorRight: classes.nodeDrawerPaperAnchorRight,
+        }}
+      >
+        <div className={classes.nodeDrawerHeader}>
+          <IconButton onClick={this.toggleNodeDrawer}>
+            <ChevronRight />
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          <div>
+            <ListItem button>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Inbox" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <StarIcon />
+              </ListItemIcon>
+              <ListItemText primary="Starred" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Send mail" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <DraftsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Drafts" />
+            </ListItem>
+          </div>
+        </List>
+      </Drawer>
+    )
+
+    const nodeFormDrawer = (
+      <Drawer
+        variant="persistent"
+        anchor="right"
+        open={isNodeFormDrawerOpen}
+        classes={{
+          paper: classes.nodeFormDrawerPaper,
+          paperAnchorRight: classes.nodeFormDrawerPaperAnchorRight,
+        }}
+      >
+        <div className={classes.nodeFormDrawerHeader}>
+          <IconButton onClick={this.toggleNodeFormDrawer}>
+            <ChevronRight />
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          <div>
+            <ListItem button>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Inbox" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <StarIcon />
+              </ListItemIcon>
+              <ListItemText primary="Starred" />
+            </ListItem>
+          </div>
+        </List>
+      </Drawer>
+    )
 
     return (
       <Grid container className={classes.gridRoot}>
         <div className={classes.root}>
           <div className={classes.appFrame}>
             <AppBar
-              className={classNames(classes.appBar, isMenuDrawerOpen && classes.appBarShift)}
+              className={classNames(classes.appBar, isMenuDrawerOpen && classes.appBarLeftShift, {
+                [classes.appBarRightShift]: isNodeDrawerOpen || isNodeFormDrawerOpen,
+              })}
               onTransitionEnd={this.handleAppBarTransition}
             >
               <Toolbar disableGutters={!isMenuDrawerOpen}>
                 <IconButton
                   color="inherit"
                   aria-label="open drawer"
-                  onClick={() => this.toggleMenuDrawer(true)}
+                  onClick={this.toggleMenuDrawer}
                   className={classNames(classes.menuButton, isMenuDrawerOpen && classes.hide)}
                 >
                   <MenuIcon />
@@ -245,10 +419,26 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
                   <IconButton
                     aria-owns={userActionOpen ? "menu-appbar" : null}
                     aria-haspopup="true"
-                    onClick={event => this.toggleUserAction(event)}
+                    onClick={event => this.handleUserAction(event)}
                     color="inherit"
                   >
                     <AccountCircle />
+                  </IconButton>
+                  <IconButton
+                    aria-owns={userActionOpen ? "menu-appbar" : null}
+                    aria-haspopup="true"
+                    onClick={() => this.toggleNodeFormDrawer()}
+                    color="inherit"
+                  >
+                    <BorderRight />
+                  </IconButton>
+                  <IconButton
+                    aria-owns={userActionOpen ? "menu-appbar" : null}
+                    aria-haspopup="true"
+                    onClick={() => this.toggleNodeDrawer()}
+                    color="inherit"
+                  >
+                    <FormatAlignRight />
                   </IconButton>
                   <Menu
                     id="menu-appbar"
@@ -262,7 +452,7 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
                       horizontal: "right",
                     }}
                     open={userActionOpen}
-                    onClose={event => this.toggleUserAction()}
+                    onClose={event => this.handleUserAction()}
                   >
                     <MenuItem onClick={this.handleUserProfile}>Profile</MenuItem>
                     <MenuItem onClick={event => this.handleUserSettings(event)}>
@@ -286,7 +476,7 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
               <div className={classes.drawerInner}>
                 <div className={classes.drawerHeader}>
                   <img src={cogliteLogo} style={{ padding: 0 }} className={classes.headerLogo} />
-                  <IconButton onClick={() => this.toggleMenuDrawer(false)}>
+                  <IconButton onClick={this.toggleMenuDrawer}>
                     <ArrowBackIcon />
                   </IconButton>
                 </div>
@@ -344,9 +534,15 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
                 </List>
               </div>
             </Drawer>
-            <main className={classes.content}>
+            <main
+              className={classNames(classes.content, {
+                [classes.contentRightShift]: isNodeDrawerOpen || isNodeFormDrawerOpen,
+              })}
+            >
               <TabContainer tabValue={tabValue}>{this.props.children}</TabContainer>
             </main>
+            {nodeFormDrawer}
+            {nodeDrawer}
           </div>
         </div>
       </Grid>
@@ -354,4 +550,4 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
   }
 }
 
-export default injectSheet(styles)(AppFrame)
+export default inject("store")(injectSheet(styles)(observer(AppFrame)))
