@@ -7,7 +7,7 @@ import SendIcon from "material-ui-icons/Send"
 import MailIcon from "material-ui-icons/Mail"
 import DeleteIcon from "material-ui-icons/Delete"
 import ReportIcon from "material-ui-icons/Report"
-//import { WithStyles, StyleRulesCallback } from "material-ui/styles/withStyles"
+import { WithStyles, StyleRulesCallback } from "material-ui/styles/withStyles"
 import Grid from "material-ui/Grid"
 import * as classNames from "classnames"
 import Drawer from "material-ui/Drawer"
@@ -24,11 +24,10 @@ import FormatAlignRight from "material-ui-icons/FormatAlignRight"
 import ChevronRight from "material-ui-icons/ChevronRight"
 import BorderRight from "material-ui-icons/BorderRight"
 import Menu, { MenuItem } from "material-ui/Menu"
-import { inject, observer } from "mobx-react"
 import { StoreRoot } from "../stores/storeRoot"
 import Tabs, { Tab } from "material-ui/Tabs"
 import * as _ from "lodash"
-import injectSheet from "react-jss"
+import { cogWrap } from "./utils/wrapperUtil"
 
 /* import Image from "material-ui-image" */
 
@@ -38,7 +37,7 @@ const appMenuDrawerWidth = 240
 const nodeDrawerWidth = 180
 const nodeFormDrawerWidth = 120
 
-const styles: any = theme => ({
+const styles: StyleRulesCallback = theme => ({
   gridRoot: {
     flexGrow: 1,
     width: "100vw",
@@ -61,7 +60,7 @@ const styles: any = theme => ({
     position: "absolute",
     /* zIndex: theme.zIndex.drawer + 1, */
     transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
+      easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
@@ -69,28 +68,28 @@ const styles: any = theme => ({
     marginLeft: appMenuDrawerWidth,
     width: `calc(100% - ${appMenuDrawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
+      easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
   appBarRightShift: {
     width: props => {
       let shiftWidth = 0
-      if (props.store.uiStore.isNodeDrawerOpen) shiftWidth += nodeDrawerWidth
-      if (props.store.uiStore.isNodeFormDrawerOpen) shiftWidth += nodeFormDrawerWidth
+      if (props.isMenuDrawerOpen) shiftWidth += appMenuDrawerWidth
+      if (props.isNodeDrawerOpen) shiftWidth += nodeDrawerWidth
+      if (props.isNodeFormDrawerOpen) shiftWidth += nodeFormDrawerWidth
       return `calc(100% - ${shiftWidth}px)`
-    } /* `calc(100% - ${nodeDrawerWidth}px)` */,
+    },
+    marginRight: props => {
+      let shiftWidth = 0
+      if (props.isNodeDrawerOpen) shiftWidth += nodeDrawerWidth
+      if (props.isNodeFormDrawerOpen) shiftWidth += nodeFormDrawerWidth
+      return shiftWidth
+    },
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginRight: props => {
-      debugger
-      let shiftWidth = 0
-      if (props.store.uiStore.isNodeDrawerOpen) shiftWidth += nodeDrawerWidth
-      if (props.store.uiStore.isNodeFormDrawerOpen) shiftWidth += nodeFormDrawerWidth
-      return shiftWidth
-    },
   },
   menuButton: {
     marginLeft: 60,
@@ -105,7 +104,7 @@ const styles: any = theme => ({
     width: appMenuDrawerWidth,
     overflow: "hidden",
     transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
+      easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
@@ -113,7 +112,7 @@ const styles: any = theme => ({
     width: 60,
     overflow: "hidden",
     transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
+      easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
@@ -159,7 +158,13 @@ const styles: any = theme => ({
   },
   nodeFormDrawerPaperAnchorRight: {
     left: "auto",
-    right: 0,
+    right: props => {
+      if (!props.isNodeDrawerOpen && props.isNodeFormDrawerOpen) {
+        return -nodeDrawerWidth
+      } else {
+        return 0
+      }
+    },
   },
   nodeFormDrawerHeader: {
     display: "flex",
@@ -175,35 +180,26 @@ const styles: any = theme => ({
     padding: theme.spacing.unit * 2,
     height: "calc(100% - 56px)",
     marginTop: 56,
-    marginLeft: props => {
-      debugger
-      let leftMargin = 0
-      if (props.store.uiStore.isNodeDrawerOpen || props.store.uiStore.isNodeFormDrawerOpen)
-        leftMargin = 300
-      return leftMargin
-    },
     [theme.breakpoints.up("sm")]: {
       height: "calc(100% - 64px)",
       marginTop: 64,
     },
     transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
+      easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginRight: -(nodeDrawerWidth + nodeFormDrawerWidth),
   },
   contentRightShift: {
-    transition: theme.transitions.create("margin", {
+    transition: theme.transitions.create("marginRight", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
     marginRight: props => {
-      debugger
       let currentMargin
-      if (props.store.uiStore.isNodeDrawerOpen && props.store.uiStore.isNodeFormDrawerOpen)
-        currentMargin = 0
-      else if (props.store.uiStore.isNodeDrawerOpen) currentMargin = nodeFormDrawerWidth
-      else if (props.store.uiStore.isNodeFormDrawerOpen) currentMargin = nodeDrawerWidth
+      if (props.isNodeDrawerOpen && props.isNodeFormDrawerOpen) currentMargin = 0
+      else if (props.isNodeDrawerOpen) currentMargin = -nodeFormDrawerWidth
+      else if (props.isNodeFormDrawerOpen) currentMargin = -nodeDrawerWidth
       return currentMargin
     },
   },
@@ -235,10 +231,7 @@ const TabContainer: React.SFC<ITabContainerProps> = props => {
   )
 }
 
-/* @inject("store")
-@observer
-@injectSheet(styles) */
-export class AppFrame extends React.Component<any, IAppFrameState> {
+export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, IAppFrameState> {
   state: IAppFrameState = {
     anchorEl: null,
     sliderValue: undefined,
@@ -246,7 +239,6 @@ export class AppFrame extends React.Component<any, IAppFrameState> {
   }
 
   toggleMenuDrawer = () => {
-    debugger
     this.props.store.uiStore.updateMenuDrawerState(!this.props.store.uiStore.isMenuDrawerOpen)
   }
 
@@ -550,4 +542,6 @@ export class AppFrame extends React.Component<any, IAppFrameState> {
   }
 }
 
-export default inject("store")(injectSheet(styles)(observer(AppFrame)))
+export default cogWrap(AppFrame, styles, true)
+
+//export default inject("store")(injectSheet(styles)(observer(AppFrame)))

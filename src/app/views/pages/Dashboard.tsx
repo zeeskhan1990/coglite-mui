@@ -1,11 +1,7 @@
 import * as React from "react"
-import { Text } from "../shared/text"
-import { CenteredContent } from "../shared/centered-content"
-import { FunDog } from "../../assets/fun-dog"
-import { Logo } from "../../assets/logo"
 import { Slider } from "rmwc/Slider"
 import { StoreRoot } from "../../stores/storeRoot"
-import { observer, inject } from "mobx-react"
+import { cogWrap } from "./../utils/wrapperUtil"
 
 interface IDashboardProps {
   store?: StoreRoot
@@ -15,13 +11,11 @@ interface IDashboardState {
   sliderValue: number
 }
 
-@inject("store")
-@observer
-export default class extends React.Component<IDashboardProps, IDashboardState> {
+export class Dashboard extends React.Component<IDashboardProps, IDashboardState> {
   state: IDashboardState = {
     sliderValue: 50,
   }
-  //this.props.store.uiStore.updateTheme("velocity")
+
   handleSliderValue(sliderValue) {
     const uiStore = this.props.store.uiStore
     this.setState({ sliderValue: sliderValue })
@@ -35,11 +29,6 @@ export default class extends React.Component<IDashboardProps, IDashboardState> {
   render() {
     return (
       <div>
-        <CenteredContent>
-          <Text>Do a barrel roll.</Text>
-          <FunDog />
-          <Logo />
-        </CenteredContent>
         <Slider
           value={this.state.sliderValue}
           min={0}
@@ -50,3 +39,5 @@ export default class extends React.Component<IDashboardProps, IDashboardState> {
     )
   }
 }
+
+export default cogWrap(Dashboard)
