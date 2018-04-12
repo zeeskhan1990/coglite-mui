@@ -25,7 +25,6 @@ export class App extends React.Component<IRootType, {}> {
     const theme = storeRoot.uiStore.muiTheme
     const rmwcPath = storeRoot.uiStore.rmwcPath
     const history = this.props.history
-    debugger
     return (
       <Provider store={storeRoot}>
         <ThemeProvider theme={theme}>
@@ -37,6 +36,7 @@ export class App extends React.Component<IRootType, {}> {
               </Router>
             </AppFrame>
             <link rel="stylesheet" type="text/css" href={rmwcPath} />
+            <link rel="stylesheet" href="../node_modules/storm-react-diagrams/dist/style.min.css" />
           </div>
         </ThemeProvider>
       </Provider>

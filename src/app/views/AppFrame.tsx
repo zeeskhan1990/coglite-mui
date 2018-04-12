@@ -7,7 +7,7 @@ import SendIcon from "material-ui-icons/Send"
 import MailIcon from "material-ui-icons/Mail"
 import DeleteIcon from "material-ui-icons/Delete"
 import ReportIcon from "material-ui-icons/Report"
-import { WithStyles, StyleRulesCallback } from "material-ui/styles/withStyles"
+import { StyleRulesCallback } from "material-ui/styles/withStyles"
 import Grid from "material-ui/Grid"
 import * as classNames from "classnames"
 import Drawer from "material-ui/Drawer"
@@ -24,10 +24,9 @@ import FormatAlignRight from "material-ui-icons/FormatAlignRight"
 import ChevronRight from "material-ui-icons/ChevronRight"
 import BorderRight from "material-ui-icons/BorderRight"
 import Menu, { MenuItem } from "material-ui/Menu"
-import { StoreRoot } from "../stores/storeRoot"
 import Tabs, { Tab } from "material-ui/Tabs"
 import * as _ from "lodash"
-import { cogWrap } from "./utils/wrapperUtil"
+import { cogWrap, IStyledProps } from "./utils/sharedUtil"
 
 /* import Image from "material-ui-image" */
 
@@ -35,7 +34,7 @@ const cogliteLogo = require("../assets/coglite-logo-dark-gold-box.png")
 
 const appMenuDrawerWidth = 240
 const nodeDrawerWidth = 180
-const nodeFormDrawerWidth = 120
+const nodeFormDrawerWidth = 150
 
 const styles: StyleRulesCallback = theme => ({
   gridRoot: {
@@ -205,10 +204,6 @@ const styles: StyleRulesCallback = theme => ({
   },
 })
 
-interface IAppFrameProps {
-  store?: StoreRoot
-}
-
 interface IAppFrameState {
   anchorEl: any
   sliderValue: any
@@ -231,7 +226,7 @@ const TabContainer: React.SFC<ITabContainerProps> = props => {
   )
 }
 
-export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, IAppFrameState> {
+export class AppFrame extends React.Component<IStyledProps, IAppFrameState> {
   state: IAppFrameState = {
     anchorEl: null,
     sliderValue: undefined,
@@ -273,7 +268,7 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
   handleAppBarTransition = _.debounce(() => {
     //Broke the 4th Wall Right here ---
     window.dispatchEvent(new Event("resize"))
-  }, 200)
+  }, 100)
 
   handleDrawerTransition = event => {
     //no-op
@@ -358,13 +353,13 @@ export class AppFrame extends React.Component<IAppFrameProps & WithStyles<any>, 
         <Divider />
         <List>
           <div>
-            <ListItem button>
+            <ListItem button draggable={false}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary="Inbox" />
             </ListItem>
-            <ListItem button>
+            <ListItem component="div" draggable={true}>
               <ListItemIcon>
                 <StarIcon />
               </ListItemIcon>

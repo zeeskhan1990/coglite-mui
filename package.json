@@ -33,6 +33,7 @@
     "typecheck": "tsc -p . --noEmit --pretty"
   },
   "dependencies": {
+    "@types/node": "^9.6.4",
     "@types/prop-types": "^15.5.2",
     "csx": "^8.5.0",
     "electron-is-dev": "0.3.0",
@@ -63,6 +64,7 @@
     "react-router-dom": "^4.1.1",
     "react-transition-group": "2.2.1",
     "rmwc": "^1.2.1",
+    "storm-react-diagrams": "^5.1.1",
     "typestyle": "^1.7.1"
   },
   "devDependencies": {

@@ -41,6 +41,7 @@ Object.keys(palette).forEach(paletteKey => {
 Sparky.task("sassImportTask", () => {
   return Sparky.src(`./src/app/index.tsx`)
     .file("*.*", file => {
+      materialSass.push(`import "./assets/coglite-base.scss"`)
       const importText = materialSass.join("\n")
       file.rename(`styled-index.tsx`)
       file.read()

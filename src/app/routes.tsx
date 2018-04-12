@@ -1,10 +1,10 @@
 import * as React from "react"
 import { Switch, Route } from "react-router"
-import Dashboard from "./views/pages/Dashboard"
+import Canvas from "./views/pages/Diagram/Canvas"
 
 export default () => (
   <Switch>
-    <Route path="/second" component={Dashboard} />
-    <Route path="/" component={Dashboard} />
+    <Route path="/second" component={Canvas} />
+    <Route path="/" component={Canvas} />
   </Switch>
 )

@@ -1,6 +1,8 @@
 import * as React from "react"
 import { inject, observer, IReactComponent } from "mobx-react"
 import injectSheet from "react-jss"
+import { StoreRoot } from "../../stores/storeRoot";
+import { WithStyles } from "material-ui";
 
 /**
  * @param wrappedComponent {IReactComponent} The base component to be wrapped
@@ -26,3 +28,9 @@ export const cogWrap = (
     return inject("store")(observer(wrappedComponent))
   }
 }
+
+export interface IStoreProps {
+  store?: StoreRoot
+}
+
+export interface IStyledProps extends IStoreProps, WithStyles<any> {}
