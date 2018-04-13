@@ -36,7 +36,7 @@ export class App extends React.Component<IRootType, {}> {
               </Router>
             </AppFrame>
             <link rel="stylesheet" type="text/css" href={rmwcPath} />
-            <link rel="stylesheet" href="../node_modules/storm-react-diagrams/dist/style.min.css" />
+            <link rel="stylesheet" type="text/css" href="assets/coglite-base.css" />
           </div>
         </ThemeProvider>
       </Provider>

@@ -1,5 +1,6 @@
 import * as _ from "lodash"
 import { LinkModel, DiagramEngine, PortModel, DefaultLinkModel } from "storm-react-diagrams"
+import { CogliteLinkModel } from "./CogliteLinkModel"
 
 export class CoglitePortModel extends PortModel {
   position: string | "leftTop" | "leftBottom" | "rightTop" | "rightBottom"
@@ -29,6 +30,7 @@ export class CoglitePortModel extends PortModel {
   }
 
   createLinkModel(): LinkModel {
-    return new DefaultLinkModel()
+    let link = super.createLinkModel()
+    return link || new CogliteLinkModel()
   }
 }

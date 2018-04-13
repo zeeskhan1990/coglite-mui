@@ -13,6 +13,7 @@ import { CogliteNodeFactory } from "./CogliteNodeFactory"
 import { SimplePortFactory } from "./SimplePortFactory"
 import { CogliteNodeModel } from "./CogliteNodeModel"
 import { CoglitePortModel } from "./CoglitePortModel"
+import { CogliteLinkFactory } from "./CogliteLinkFactory"
 
 /**
  * @Author Dylan Vorster
@@ -23,6 +24,7 @@ export default () => {
   engine.installDefaultFactories()
 
   // register some other factories as well
+  engine.registerLinkFactory(new CogliteLinkFactory())
   engine.registerPortFactory(new SimplePortFactory("coglite", config => new CoglitePortModel()))
   engine.registerNodeFactory(new CogliteNodeFactory())
 

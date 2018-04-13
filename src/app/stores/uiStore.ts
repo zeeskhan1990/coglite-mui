@@ -8,6 +8,7 @@ class UiStore {
   @observable isMenuDrawerOpen = false
   @observable isNodeDrawerOpen = false
   @observable isNodeFormDrawerOpen = false
+  @observable isThemeDialogOpen = false
 
   constructor() {
     mobx.autorun(() => console.log(this.report))
@@ -54,6 +55,16 @@ class UiStore {
   @action
   updateNodeFormDrawerState(isNodeFormDrawerOpen) {
     this.isNodeFormDrawerOpen = isNodeFormDrawerOpen
+  }
+
+  @action
+  openThemeDialog() {
+    this.isThemeDialogOpen = true
+  }
+
+  @action
+  closeThemeDialog() {
+    this.isThemeDialogOpen = false
   }
 }
 

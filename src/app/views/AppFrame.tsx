@@ -27,6 +27,7 @@ import Menu, { MenuItem } from "material-ui/Menu"
 import Tabs, { Tab } from "material-ui/Tabs"
 import * as _ from "lodash"
 import { cogWrap, IStyledProps } from "./utils/sharedUtil"
+import { ConfirmOptionDialog } from "./utils/ConfirmOptionDialog"
 
 /* import Image from "material-ui-image" */
 
@@ -202,12 +203,17 @@ const styles: StyleRulesCallback = theme => ({
       return currentMargin
     },
   },
+  dialog: {
+    width: "80%",
+    maxHeight: 435,
+  },
 })
 
 interface IAppFrameState {
   anchorEl: any
   sliderValue: any
   tabValue: number
+  themeDialogOpen: boolean
 }
 
 interface ITabContainerProps {
@@ -216,14 +222,7 @@ interface ITabContainerProps {
 }
 
 const TabContainer: React.SFC<ITabContainerProps> = props => {
-  return (
-    <Typography component="div" style={{ padding: 8 * 1 }}>
-      <div style={{ padding: 8 * 1, display: "flex", justifyContent: "center" }}>
-        {props.tabValue + 1}
-      </div>
-      <div style={{ padding: 8 * 1 }}>{props.children}</div>
-    </Typography>
-  )
+  return <div>{props.children}</div>
 }
 
 export class AppFrame extends React.Component<IStyledProps, IAppFrameState> {
@@ -231,6 +230,7 @@ export class AppFrame extends React.Component<IStyledProps, IAppFrameState> {
     anchorEl: null,
     sliderValue: undefined,
     tabValue: 0,
+    themeDialogOpen: false,
   }
 
   toggleMenuDrawer = () => {
@@ -263,6 +263,18 @@ export class AppFrame extends React.Component<IStyledProps, IAppFrameState> {
 
   handleTabChange = (event, tabValue) => {
     this.setState({ tabValue })
+  }
+
+  openThemeDialog = () => this.setState({ themeDialogOpen: true })
+
+  handleThemeDialogClose = (selectedOption: string, action: string) => {
+    if (action === "ok") {
+      const uiStore = this.props.store.uiStore
+      uiStore.updateTheme(selectedOption)
+    } else {
+      //no-op
+    }
+    this.setState({ themeDialogOpen: false })
   }
 
   handleAppBarTransition = _.debounce(() => {
@@ -442,9 +454,7 @@ export class AppFrame extends React.Component<IStyledProps, IAppFrameState> {
                     onClose={event => this.handleUserAction()}
                   >
                     <MenuItem onClick={this.handleUserProfile}>Profile</MenuItem>
-                    <MenuItem onClick={event => this.handleUserSettings(event)}>
-                      My account
-                    </MenuItem>
+                    <MenuItem onClick={event => this.openThemeDialog()}>Theme Settings</MenuItem>
                   </Menu>
                 </div>
               </Toolbar>
@@ -531,6 +541,16 @@ export class AppFrame extends React.Component<IStyledProps, IAppFrameState> {
             {nodeFormDrawer}
             {nodeDrawer}
           </div>
+          <ConfirmOptionDialog
+            classes={{
+              paper: classes.dialog,
+            }}
+            open={this.state.themeDialogOpen}
+            onOptionDialogClose={this.handleThemeDialogClose}
+            selectedOption={this.props.store.uiStore.themeId}
+            options={["myriad", "velocity", "ranger"]}
+            dialogOptions={{ dialogTitle: "Choose Theme", cancelText: "Cancel", okText: "Update" }}
+          />
         </div>
       </Grid>
     )

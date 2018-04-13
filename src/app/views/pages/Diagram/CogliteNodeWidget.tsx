@@ -5,8 +5,8 @@ import { withStyles, StyledComponentProps, StyleRulesCallback } from "material-u
 import Card, { CardContent, CardMedia } from "material-ui/Card"
 import IconButton from "material-ui/IconButton"
 import Typography from "material-ui/Typography"
-import Input from "@material-ui/icons/Input"
-import LabelOutline from "@material-ui/icons/LabelOutline"
+import Input from "material-ui-icons/Input"
+import LabelOutline from "material-ui-icons/LabelOutline"
 import Divider from "material-ui/Divider"
 import { WithStyles } from "material-ui"
 
