@@ -4,7 +4,7 @@ import Canvas from "./views/pages/Diagram/Canvas"
 
 export default () => (
   <Switch>
-    <Route path="/second" component={Canvas} />
-    <Route path="/" component={Canvas} />
+    <Route path="/second" render={() => <Canvas num="2" someProp={100} />} />
+    <Route path="/" render={() => <Canvas num="2" someProp={100} />} />
   </Switch>
 )

@@ -1,6 +1,6 @@
 @import "../diagram/main";
 
-.srd-demo-canvas{
+.srd-coglite-canvas{
     height: 100%;
     min-height: 600px;
     background-color: #F7F7F7 !important;
@@ -31,4 +31,10 @@
     .pointui{
         fill: rgba(white,0.5);
     }
+}
+
+.diagram-layer{
+    position: relative;
+    height: 100%;
+    flex: 1
 }

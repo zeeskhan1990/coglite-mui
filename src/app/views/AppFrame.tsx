@@ -19,8 +19,12 @@ import Divider from "material-ui/Divider"
 import IconButton from "material-ui/IconButton"
 import MenuIcon from "material-ui-icons/Menu"
 import ArrowBackIcon from "material-ui-icons/ArrowBack"
+import ArrowForwardIcon from "material-ui-icons/ArrowForward"
+import Close from "material-ui-icons/Close"
 import AccountCircle from "material-ui-icons/AccountCircle"
 import FormatAlignRight from "material-ui-icons/FormatAlignRight"
+import Input from "material-ui-icons/Input"
+import LabelOutline from "material-ui-icons/LabelOutline"
 import ChevronRight from "material-ui-icons/ChevronRight"
 import BorderRight from "material-ui-icons/BorderRight"
 import Menu, { MenuItem } from "material-ui/Menu"
@@ -207,6 +211,11 @@ const styles: StyleRulesCallback = theme => ({
     width: "80%",
     maxHeight: 435,
   },
+  tabContainer: {
+    position: "relative",
+    height: "100%",
+    width: "100%",
+  },
 })
 
 interface IAppFrameState {
@@ -219,10 +228,11 @@ interface IAppFrameState {
 interface ITabContainerProps {
   children: React.ReactNode
   tabValue: number
+  classRules: any
 }
 
 const TabContainer: React.SFC<ITabContainerProps> = props => {
-  return <div>{props.children}</div>
+  return <div className={props.classRules.tabContainer}>{props.children}</div>
 }
 
 export class AppFrame extends React.Component<IStyledProps, IAppFrameState> {
@@ -312,35 +322,41 @@ export class AppFrame extends React.Component<IStyledProps, IAppFrameState> {
       >
         <div className={classes.nodeDrawerHeader}>
           <IconButton onClick={this.toggleNodeDrawer}>
-            <ChevronRight />
+            <ArrowForwardIcon />
           </IconButton>
         </div>
         <Divider />
         <List>
           <div>
-            <ListItem button>
+            <ListItem
+              component="div"
+              draggable={true}
+              onDragStart={event => {
+                event.dataTransfer.setData(
+                  "storm-diagram-node",
+                  JSON.stringify({ type: "cogliteIn" }),
+                )
+              }}
+            >
               <ListItemIcon>
-                <InboxIcon />
+                <Input />
               </ListItemIcon>
-              <ListItemText primary="Inbox" />
+              <ListItemText primary="Input" />
             </ListItem>
-            <ListItem button>
+            <ListItem
+              component="div"
+              draggable={true}
+              onDragStart={event => {
+                event.dataTransfer.setData(
+                  "storm-diagram-node",
+                  JSON.stringify({ type: "cogliteOut" }),
+                )
+              }}
+            >
               <ListItemIcon>
-                <StarIcon />
+                <LabelOutline />
               </ListItemIcon>
-              <ListItemText primary="Starred" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <SendIcon />
-              </ListItemIcon>
-              <ListItemText primary="Send mail" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <DraftsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Drafts" />
+              <ListItemText primary="Output" />
             </ListItem>
           </div>
         </List>
@@ -359,25 +375,12 @@ export class AppFrame extends React.Component<IStyledProps, IAppFrameState> {
       >
         <div className={classes.nodeFormDrawerHeader}>
           <IconButton onClick={this.toggleNodeFormDrawer}>
-            <ChevronRight />
+            <Close />
           </IconButton>
         </div>
         <Divider />
         <List>
-          <div>
-            <ListItem button draggable={false}>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary="Inbox" />
-            </ListItem>
-            <ListItem component="div" draggable={true}>
-              <ListItemIcon>
-                <StarIcon />
-              </ListItemIcon>
-              <ListItemText primary="Starred" />
-            </ListItem>
-          </div>
+          <div>Jsonforms-mobx goes here</div>
         </List>
       </Drawer>
     )
@@ -536,7 +539,9 @@ export class AppFrame extends React.Component<IStyledProps, IAppFrameState> {
                 [classes.contentRightShift]: isNodeDrawerOpen || isNodeFormDrawerOpen,
               })}
             >
-              <TabContainer tabValue={tabValue}>{this.props.children}</TabContainer>
+              <TabContainer tabValue={tabValue} classRules={classes}>
+                {this.props.children}
+              </TabContainer>
             </main>
             {nodeFormDrawer}
             {nodeDrawer}
