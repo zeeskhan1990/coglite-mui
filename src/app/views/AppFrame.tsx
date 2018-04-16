@@ -41,8 +41,7 @@ const appMenuDrawerWidth = 240
 const nodeDrawerWidth = 180
 const nodeFormDrawerWidth = 150
 
-//@ts-ignore
-const styles: StyleRulesCallback = theme => ({
+const styles: StyleRulesCallback<"root"> = theme => ({
   gridRoot: {
     flexGrow: 1,
     width: "100vw",

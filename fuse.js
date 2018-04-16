@@ -100,6 +100,7 @@ Sparky.task("default", ["clean:dist", "clean:cache", "build:app", "build:desktop
 // clean
 Sparky.task("clean:dist", () => Sparky.src("dist/*").clean("dist/"));
 Sparky.task("clean:cache", () => Sparky.src(".fusebox/*").clean(".fusebox/"));
+Sparky.task("clean:all", ["clean:dist", "clean:cache"]);
 
 // prod
 Sparky.task("set-production-env", () => production = true);
