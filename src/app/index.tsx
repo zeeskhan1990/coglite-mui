@@ -1,7 +1,6 @@
 // This is the entry point for the renderer process.
 //
 // Here we disable a few electron settings and mount the root component.
-import "./styles.css"
 
 import * as React from "react"
 import * as ReactDOM from "react-dom"
@@ -11,6 +10,8 @@ import { App } from "./app"
 import { webFrame } from "electron"
 const browserHistory = createBrowserHistory()
 const routingStore = new RouterStore()
+
+import "./styles.css"
 
 const history = syncHistoryWithStore(browserHistory, routingStore)
 

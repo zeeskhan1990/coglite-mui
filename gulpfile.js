@@ -1,3 +1,4 @@
+var path = require('path')
 var gulp = require('gulp')
 var postcss = require('gulp-postcss')
 var concat = require('gulp-concat')
@@ -6,18 +7,6 @@ var sourcemaps = require('gulp-sourcemaps')
 var postcss = require('gulp-postcss');
 var concat = require('gulp-concat');
 var merge = require('merge-stream');
-
-
-gulp.task("sass", async () => {
-    return gulp.src(["src/app/**/*.{scss, .css}"])
-        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-        .pipe(concat('styles.css'))
-        .pipe(postcss([
-            require('postcss-discard-duplicates'),
-            require('postcss-csso')({ restructure: true })]))
-        .pipe(gulp.dest("src/app/"));   
-});
-
 
 
 gulp.task('app:postcss', function () {
@@ -32,16 +21,18 @@ gulp.task('app:postcss', function () {
                 require('postcss-cssnext')({ browsers: 'last 2 Chrome version' }),
                 require('postcss-inline-svg')(),
                 require('postcss-svgo')(),
+                require('postcss-discard-duplicates'),
                 require('postcss-csso')({ restructure: false })
                 ]))
           .pipe(concat('css.out.css'));
 
-
-
         var mergedStream = merge(scssStream, postCssStream)
                               .pipe(concat('styles.css'))
-                              .pipe(gulp.dest('dist'))
-
+                              .pipe(postcss([
+                                  require('postcss-discard-duplicates'),
+                                  require('postcss-csso')({ restructure: true })
+                                  ]))
+                              .pipe(gulp.dest('dist/app'))
 
 return mergedStream
   }
