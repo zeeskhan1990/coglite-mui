@@ -1,11 +1,13 @@
-const {FuseBox,SassPlugin,CSSPlugin,WebIndexPlugin,Sparky,UglifyJSPlugin,QuantumPlugin,EnvPlugin} = require("fuse-box");
+const {FuseBox,SassPlugin,CSSPlugin,WebIndexPlugin,Sparky,UglifyJSPlugin,QuantumPlugin,EnvPlugin, CopyPlugin} = require("fuse-box");
 const express = require("express");
 const path = require("path");
 const {spawn} = require("child_process");
 
-let producer;
-let production = false;
+let producer
+const production = process.env.NODE_ENV === "production" || false
 
+const OUTPUT_DIR = "dist"
+const ASSETS = ["*.jpg", "*.png", "*.jpeg", "*.gif", "*.svg"]
 
 Sparky.task("build:app", () => {
     const fuse = FuseBox.init({
@@ -45,6 +47,8 @@ Sparky.task("build:app", () => {
 
     const app = fuse.bundle("app")
         .instructions('> [index.tsx] + fuse-box-css')
+        .plugin(CSSPlugin())
+        .plugin(CopyPlugin({ useDefault: false, files: ASSETS, dest: "assets", resolve: "assets/" }))
 
     if (!production) {
         app.hmr().watch()
