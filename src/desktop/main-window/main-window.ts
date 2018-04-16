@@ -31,9 +31,6 @@ export function createMainWindow(appPath: string, showDelay: number = 100) {
     useContentSize: true,
     titleBarStyle: "hidden-inset",
     autoHideMenuBar: true,
-    // backgroundColor: '#fff',
-    //vibrancy: "light",
-    //transparent: true,
     title: "Coglite",
     webPreferences: {
       backgroundThrottling: false,

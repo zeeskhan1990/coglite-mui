@@ -1,4 +1,5 @@
-import { createMainWindow } from "./main-window"
+import { createMainWindow } from "../../../src/desktop/main-window//main-window"
+
 // @ts-ignore
 import * as containDeep from "jest-expect-contain-deep"
 import { BrowserWindow } from "electron"

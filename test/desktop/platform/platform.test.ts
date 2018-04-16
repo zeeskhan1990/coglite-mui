@@ -1,4 +1,4 @@
-import { isLinux, isMac, isWindows } from "./platform"
+import { isLinux, isMac, isWindows } from "../../../src/desktop/platform"
 
 test("detects linux", () => {
   Object.defineProperty(process, "platform", { value: "linux" })

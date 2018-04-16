@@ -1,16 +1,10 @@
-// This is the main process entry point. It is the
-// first file that is run on startup.
-//
-// It is responsible for launching a renderer window.
-
 import { app, dialog, ipcMain } from "electron"
-import { createMainWindow, loadURL } from "./main-window"
-import * as log from "electron-log"
 import * as isDev from "electron-is-dev"
-import { createUpdater } from "./updater"
+import * as log from "electron-log"
+import { createMainWindow, loadURL } from "./main-window"
 import { createMenu } from "./menus"
+import { createUpdater } from "./updater"
 
-// set proper logging level
 log.transports.file.level = isDev ? false : "info"
 log.transports.console.level = isDev ? "debug" : false
 
@@ -20,7 +14,6 @@ let showStorybook = false
 /** usually we'd just use __dirname here, however, the FuseBox
  bundler rewrites that, so we have to get it from Electron. **/
 const appPath = app.getAppPath()
-
 
 app.on("ready", () => {
   window = createMainWindow(appPath)
@@ -41,8 +34,6 @@ app.on("ready", () => {
   }
 })
 
-
 app.on("window-all-closed", app.quit)
 
-// setup the auto-updater
 createUpdater(app)

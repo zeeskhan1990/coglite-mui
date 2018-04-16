@@ -1,8 +1,8 @@
-import * as React from "react"
 import Button from "material-ui/Button"
 import Dialog, { DialogActions, DialogContent, DialogTitle } from "material-ui/Dialog"
-import Radio, { RadioGroup } from "material-ui/Radio"
 import { FormControlLabel } from "material-ui/Form"
+import Radio, { RadioGroup } from "material-ui/Radio"
+import * as React from "react"
 
 export interface ConfirmOptionDialogState {
   selectedOption: string

@@ -1,16 +1,17 @@
+import { WithStyles } from "material-ui"
+import { IReactComponent, inject, observer } from "mobx-react"
 import * as React from "react"
-import { inject, observer, IReactComponent } from "mobx-react"
 import injectSheet from "react-jss"
-import { StoreRoot } from "../../stores/storeRoot";
-import { WithStyles } from "material-ui";
+import { StoreRoot } from "../../stores/storeRoot"
 
 /**
  * @param wrappedComponent {IReactComponent} The base component to be wrapped
  * @param styles {style} The styles to be injected
  * @param dynamicStyling {boolean} If the styles needs to be updated dynamically on store updates
  */
+
 export const cogWrap = (
-  wrappedComponent: IReactComponent,
+  wrappedComponent: IReactComponent<any>,
   styles?: any,
   dynamicStyling: boolean = false,
 ) => {

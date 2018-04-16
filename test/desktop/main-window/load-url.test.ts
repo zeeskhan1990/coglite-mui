@@ -1,4 +1,4 @@
-import { loadURL } from "./load-url"
+import { loadURL } from "../../../src/desktop/main-window/load-url"
 
 test("loads from storybook", () => {
   const loadStub = jest.fn()

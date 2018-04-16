@@ -1,12 +1,11 @@
-import { autoUpdater } from "electron-updater"
-import * as log from "electron-log"
 import * as isDev from "electron-is-dev"
+import * as log from "electron-log"
+import { autoUpdater } from "electron-updater"
 
 /**
  * Should we peform the auto-update check?
  */
 const shouldCheck = !isDev
-
 
 /**
  * Setup the auto-update capabilities.
@@ -53,25 +52,3 @@ export function createUpdater(app: Electron.App): void {
     autoUpdater.quitAndInstall()
   })
 }
-
-
-/*
-# Testing In Development
-
-You may want to enable this in dev-mode the ensure everything
-is working properly. To do this, you'll need to have a config
-file called "dev-app-update.yml" in the project's root.
-
-If you're shipping via S3 or another provider, please the
-[electron-builder docs](https://github.com/electron-userland/electron-builder/wiki/Publishing-Artifacts).
-
-# Example File
-
-```yml
-provider: 'github'
-repo: 'typescript-with-electron-react-kit'
-owner: 'skellock'
-```
-
-Heads up: dev-app-update.yml is in the .gitignore file.
-*/

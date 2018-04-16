@@ -14,7 +14,7 @@ import Drawer from "material-ui/Drawer"
 import AppBar from "material-ui/AppBar"
 import Toolbar from "material-ui/Toolbar"
 import List from "material-ui/List"
-import Typography from "material-ui/Typography"
+//import Typography from "material-ui/Typography"
 import Divider from "material-ui/Divider"
 import IconButton from "material-ui/IconButton"
 import MenuIcon from "material-ui-icons/Menu"
@@ -25,7 +25,7 @@ import AccountCircle from "material-ui-icons/AccountCircle"
 import FormatAlignRight from "material-ui-icons/FormatAlignRight"
 import Input from "material-ui-icons/Input"
 import LabelOutline from "material-ui-icons/LabelOutline"
-import ChevronRight from "material-ui-icons/ChevronRight"
+//import ChevronRight from "material-ui-icons/ChevronRight"
 import BorderRight from "material-ui-icons/BorderRight"
 import Menu, { MenuItem } from "material-ui/Menu"
 import Tabs, { Tab } from "material-ui/Tabs"
@@ -547,9 +547,7 @@ export class AppFrame extends React.Component<IStyledProps, IAppFrameState> {
             {nodeDrawer}
           </div>
           <ConfirmOptionDialog
-            classes={{
-              paper: classes.dialog,
-            }}
+            classes={{ paper: classes.dialog }}
             open={this.state.themeDialogOpen}
             onOptionDialogClose={this.handleThemeDialogClose}
             selectedOption={this.props.store.uiStore.themeId}

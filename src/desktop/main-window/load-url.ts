@@ -11,7 +11,7 @@ export function loadURL(
   } else {
     window.loadURL(
       format({
-        pathname: join(appPath, "out/index.html"),
+        pathname: join(appPath, "dist/app/index.html"),
         protocol: "file:",
         slashes: true,
       }),
