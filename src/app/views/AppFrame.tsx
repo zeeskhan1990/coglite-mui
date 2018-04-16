@@ -75,7 +75,7 @@ const styles: StyleRulesCallback<"root"> = theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-  },
+  } as React.CSSProperties,
   appBarRightShift: {
     width: props => {
       let shiftWidth = 0
