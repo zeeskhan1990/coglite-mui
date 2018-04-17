@@ -75,16 +75,16 @@ const styles: StyleRulesCallback<"root"> = theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-  } as React.CSSProperties,
+  },
   appBarRightShift: {
-    width: props => {
+    width: (props: any) => {
       let shiftWidth = 0
       if (props.isMenuDrawerOpen) shiftWidth += appMenuDrawerWidth
       if (props.isNodeDrawerOpen) shiftWidth += nodeDrawerWidth
       if (props.isNodeFormDrawerOpen) shiftWidth += nodeFormDrawerWidth
       return `calc(100% - ${shiftWidth}px)`
     },
-    marginRight: props => {
+    marginRight: (props: any) => {
       let shiftWidth = 0
       if (props.isNodeDrawerOpen) shiftWidth += nodeDrawerWidth
       if (props.isNodeFormDrawerOpen) shiftWidth += nodeFormDrawerWidth
@@ -120,8 +120,8 @@ const styles: StyleRulesCallback<"root"> = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
+  // Make the items inside not wrap when transitioning:
   drawerInner: {
-    // Make the items inside not wrap when transitioning:
     width: appMenuDrawerWidth,
   },
   drawerHeader: {
@@ -141,6 +141,7 @@ const styles: StyleRulesCallback<"root"> = theme => ({
     width: "120px",
     height: "40px",
   },
+
   nodeDrawerPaper: {
     position: "relative",
     width: nodeDrawerWidth,
@@ -199,7 +200,7 @@ const styles: StyleRulesCallback<"root"> = theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginRight: props => {
+    marginRight: (props: any) => {
       let currentMargin
       if (props.isNodeDrawerOpen && props.isNodeFormDrawerOpen) currentMargin = 0
       else if (props.isNodeDrawerOpen) currentMargin = -nodeFormDrawerWidth

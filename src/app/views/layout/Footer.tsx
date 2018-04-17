@@ -49,11 +49,3 @@ const FooterBase = (P: FooterProps) => (
 
 const Footer = withStyles(styles, { withTheme: true })(FooterBase)
 export { Footer as default, Footer }
-
-/*//style={{alignSelf: 'flex-end'}}
-  <div className={invert ? classes.invertFooter : classes.footer} >
-    <img className={classes.logo} src={logo} alt="other-Logo" />
-    <Typography variant="caption" gutterBottom>{copyrightString}</Typography>
-    <Typography variant="body1">{`Version: ${version || 'pre-release'}`}</Typography>
-  </div>
-  */

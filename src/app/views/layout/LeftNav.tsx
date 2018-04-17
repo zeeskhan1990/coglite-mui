@@ -9,7 +9,7 @@ import {
   SwapHoriz,
 } from "@material-ui/icons"
 
-import { DrawerItem } from "./DrawerItem"
+import { DrawerLink } from "../atoms/DrawerLink"
 
 const leftNavStyles: React.CSSProperties = {
   width: 64,
@@ -40,17 +40,16 @@ type LeftNavProps = {
 const _LeftNav = (P: LeftNavProps) => (
   <React.Fragment>
     <Paper className={P.invert ? P.classes.leftNavInvert : P.classes.leftNav}>
-      <DrawerItem route="/" icon={<Dashboard />} />
-      <DrawerItem route="/pages/notebook" icon={<SwapHoriz />} />
-      <DrawerItem route="/pages/datasets" icon={<AccountBalanceWallet />} />
-      <DrawerItem route="/pages/cloud" icon={<Cloud />} />
-      <DrawerItem route="/pages/settings" icon={<Settings />} />
-      <DrawerItem route="/pages/about" icon={<HelpOutline />} />
+      <DrawerLink route="/" icon={<Dashboard />} />
+      <DrawerLink route="/pages/notebook" icon={<SwapHoriz />} />
+      <DrawerLink route="/pages/datasets" icon={<AccountBalanceWallet />} />
+      <DrawerLink route="/pages/cloud" icon={<Cloud />} />
+      <DrawerLink route="/pages/settings" icon={<Settings />} />
+      <DrawerLink route="/pages/about" icon={<HelpOutline />} />
     </Paper>
   </React.Fragment>
 )
 
-const LeftNav = withStyles(styles, { withTheme: true })(_LeftNav)
-export { LeftNav as default, LeftNav }
+export const LeftNav = withStyles(styles, { withTheme: true })(_LeftNav)
 
-// add "label" if you want to use text ie: <DrawerItem label="Portfolio" route="/" icon={<Dashboard />} />
+// add "label" if you want to use text ie: <DrawerLink label="Portfolio" route="/" icon={<Dashboard />} />

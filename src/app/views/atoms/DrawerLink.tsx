@@ -8,7 +8,7 @@ interface Props {
   label?: string
 }
 
-export function DrawerItem({ icon, label, route }: Props) {
+export function DrawerLink({ icon, label, route }: Props) {
   return (
     <ListItem button component={props => <NavLink {...props as any} exact to={route} />}>
       <ListItemIcon>{icon}</ListItemIcon>

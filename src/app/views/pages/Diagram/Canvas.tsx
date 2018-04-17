@@ -7,7 +7,7 @@ import {
   DiagramWidget,
   LabelModel,
 } from "storm-react-diagrams"
-import { _ } from "lodash"
+import * as _ from "lodash"
 import * as React from "react"
 
 // import the custom models
