@@ -55,6 +55,12 @@ const styles: StyleRulesCallback = theme => ({
     boxShadow: theme.shadows["4"],
     ...theme.mixins.toolbar,
   },
+  headerLogo: {
+    position: "relative",
+    padding: 0,
+    width: "120px",
+    height: "40px",
+  },
 })
 
 type LeftAppDrawerProps = {

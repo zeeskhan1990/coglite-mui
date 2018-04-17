@@ -73,14 +73,8 @@ export const _Header = (props: HeaderProps) => (
         <Menu
           id="menu-appbar"
           anchorEl={props.anchorEl}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
           open={props.userActionOpen}
           onClose={event => this.handleUserAction()}
         >

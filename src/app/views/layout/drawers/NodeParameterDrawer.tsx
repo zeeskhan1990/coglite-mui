@@ -3,17 +3,26 @@ import { Drawer, IconButton, List, Divider } from "material-ui"
 import Close from "@material-ui/icons/Close"
 import * as React from "react"
 
+const nodeFormDrawerWidth = 150
+const nodeDrawerWidth = 180
+
 //@ts-ignore
 const styles: StyleRulesCallback = theme => ({
-  nodeDrawerPaper: {
+  nodeFormDrawerPaper: {
     position: "relative",
-    width: props => props.nodeDrawerWidth,
+    width: nodeFormDrawerWidth,
   },
-  nodeDrawerPaperAnchorRight: {
+  nodeFormDrawerPaperAnchorRight: {
     left: "auto",
-    right: 0,
+    right: props => {
+      if (!props.isNodeDrawerOpen && props.isNodeFormDrawerOpen) {
+        return -nodeDrawerWidth
+      } else {
+        return 0
+      }
+    },
   },
-  nodeDrawerHeader: {
+  nodeFormDrawerHeader: {
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",

@@ -4,17 +4,6 @@ import { StyleRulesCallback } from "material-ui/styles/withStyles"
 import Grid from "material-ui/Grid"
 import * as classNames from "classnames"
 
-import AppBar from "material-ui/AppBar"
-import Toolbar from "material-ui/Toolbar"
-import IconButton from "material-ui/IconButton"
-import MenuIcon from "@material-ui/icons/Menu"
-
-import AccountCircle from "@material-ui/icons/AccountCircle"
-import FormatAlignRight from "@material-ui/icons/FormatAlignRight"
-
-import BorderRight from "@material-ui/icons/BorderRight"
-import Menu, { MenuItem } from "material-ui/Menu"
-import Tabs, { Tab } from "material-ui/Tabs"
 import * as _ from "lodash"
 import { cogWrap, IStyledProps, ConfirmOptionDialog } from "../utils"
 import { NodeParameterDrawer } from "./drawers/NodeParameterDrawer"
@@ -90,82 +79,11 @@ const styles: StyleRulesCallback<"root"> = theme => ({
   hide: {
     display: "none",
   },
-  drawerPaper: {
-    position: "relative",
-    height: "100%",
-    width: appMenuDrawerWidth,
-    overflow: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    width: 60,
-    overflow: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  // Make the items inside not wrap when transitioning:
-  drawerInner: {
-    width: appMenuDrawerWidth,
-  },
-  drawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "0 8px",
-    boxShadow: theme.shadows["4"],
-    ...theme.mixins.toolbar,
-  },
+
   flex: {
     flex: 1,
   },
-  headerLogo: {
-    position: "relative",
-    padding: 0,
-    width: "120px",
-    height: "40px",
-  },
 
-  nodeDrawerPaper: {
-    position: "relative",
-    width: nodeDrawerWidth,
-  },
-  nodeDrawerPaperAnchorRight: {
-    left: "auto",
-    right: 0,
-  },
-  nodeDrawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
-  },
-  nodeFormDrawerPaper: {
-    position: "relative",
-    width: nodeFormDrawerWidth,
-  },
-  nodeFormDrawerPaperAnchorRight: {
-    left: "auto",
-    right: props => {
-      if (!props.isNodeDrawerOpen && props.isNodeFormDrawerOpen) {
-        return -nodeDrawerWidth
-      } else {
-        return 0
-      }
-    },
-  },
-  nodeFormDrawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
-  },
   content: {
     width: "100%",
     flexGrow: 1,
@@ -199,11 +117,6 @@ const styles: StyleRulesCallback<"root"> = theme => ({
   dialog: {
     width: "80%",
     maxHeight: 435,
-  },
-  tabContainer: {
-    position: "relative",
-    height: "100%",
-    width: "100%",
   },
 })
 
